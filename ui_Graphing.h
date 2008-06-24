@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Tue Jun 24 14:47:49 2008
+** Created: Tue Jun 24 15:38:05 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -36,7 +36,7 @@ public:
     QGridLayout *gridLayout;
     QLineEdit *equationLineEdit;
     QLabel *label_3;
-    QLineEdit *lineEdit;
+    QLineEdit *independentVariableLineEdit;
     QLabel *label_2;
     QDoubleSpinBox *lowerDoubleSpinBox;
     QDoubleSpinBox *higherDoubleSpinBox;
@@ -77,11 +77,11 @@ public:
 
     gridLayout->addWidget(label_3, 0, 2, 1, 1);
 
-    lineEdit = new QLineEdit(centralwidget);
-    lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
-    lineEdit->setMaximumSize(QSize(50, 16777215));
+    independentVariableLineEdit = new QLineEdit(centralwidget);
+    independentVariableLineEdit->setObjectName(QString::fromUtf8("independentVariableLineEdit"));
+    independentVariableLineEdit->setMaximumSize(QSize(50, 16777215));
 
-    gridLayout->addWidget(lineEdit, 0, 3, 1, 1);
+    gridLayout->addWidget(independentVariableLineEdit, 0, 3, 1, 1);
 
     label_2 = new QLabel(centralwidget);
     label_2->setObjectName(QString::fromUtf8("label_2"));
