@@ -1,5 +1,6 @@
-#include <iostream>
 #include "ReversePolishNotationCalculation.h"
+
+#include <iostream>
 #include <math.h>
 
 QStringList ReversePolishNotationCalculation::PermittedOperators;
