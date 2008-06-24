@@ -1,8 +1,10 @@
 #ifndef GRAPHING_H_
 #define GRAPHING_H_
 
-#include <QObject>
 #include "ui_Graphing.h"
+#include "ConstantsModel.h"
+
+#include <QObject>
 
 enum Validation //Used when validating the equation
 {
@@ -26,9 +28,11 @@ public:
 	
 public slots:
 	void EvaluateEquation();
+	void AddConstantsModelPoint();
 
 public:
 	Ui::MainWindow mainWindow;
+	ConstantsModel model;
 };
 
 #endif /*GRAPHING_H_*/

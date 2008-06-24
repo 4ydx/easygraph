@@ -1,8 +1,9 @@
-#include <QMessageBox>
-
 #include "Graphing.h"
+
 #include "ShuntingYardAlgorithm.h"
 #include "ReversePolishNotationCalculation.h"
+
+#include <QMessageBox>
 
 Graphing::Graphing() {
 }
@@ -12,23 +13,25 @@ Graphing::~Graphing() {
 
 void Graphing::initialize(QMainWindow &main) {
 	mainWindow.setupUi(&main);
+	mainWindow.constantsTableView->setModel(&model);
+	QObject::connect(mainWindow.addConstantsModelPointPushButton, SIGNAL(clicked()), this, SLOT(AddConstantsModelPoint()));
 	QObject::connect(mainWindow.evaluatePushButton, SIGNAL(clicked()), this, SLOT(EvaluateEquation()));
 	main.show();
 }
 
 void Graphing::EvaluateEquation() {
 	QString equation = FormatEquation(mainWindow.equationLineEdit->text());
-	mainWindow.equationLabel->setText(equation);
-	
-	if(ValidateEquation(equation))
-	{
+	if (ValidateEquation(equation)) {
+		mainWindow.equationLabel->setText("Equation: " + equation);
+
 		ShuntingYardAlgorithm sya;
 		equation = sya.GenerateReversePolishNotation(equation);
-		mainWindow.textBrowser->setText(equation);
-	}
-	else
-	{
-		QMessageBox::critical(0, "Invalid Equation", "The equation appears to be poorly formatted.  Be sure to use \"*\" between variables.");
+		mainWindow.textBrowser->setText("Equation: " + equation);
+	} else {
+		QMessageBox::critical(
+				0,
+				"Invalid Equation",
+				"The equation appears to be poorly formatted.  Be sure to use \"*\" between variables.");
 	}
 }
 
@@ -95,11 +98,11 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 		if(ok) //Current value is numeric
 		{
 			if(PreviousValue == VARIABLE)
-				if(IsValid) IsValid = false;
-			
+			if(IsValid) IsValid = false;
+
 			if(PreviousValue == NUMERIC) // "5 34" doesn't make sense in the context of an equation
-				if(IsValid) IsValid = false;
-				
+			if(IsValid) IsValid = false;
+
 			PreviousValue = NUMERIC;
 		}
 		else
@@ -107,20 +110,20 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))
 			{
 				if(PreviousValue == OPERATOR) // "+ -" doesn't make sense in an equation
-					if(IsValid) IsValid = false;
-					
+				if(IsValid) IsValid = false;
+
 				PreviousValue = OPERATOR;
 			}
 			else
 			{
 				if(Token != ")" && Token != "(")
-				{	
+				{
 					if(PreviousValue == NUMERIC) // "5 d" does make sense if "*" is implied.  i don't bother w/ that.
-						if(IsValid) IsValid = false;
-					
+					if(IsValid) IsValid = false;
+
 					if(PreviousValue == VARIABLE) // "c g" (as variables/constants) doesn't make sense
-						if(IsValid) IsValid = false;
-					
+					if(IsValid) IsValid = false;
+
 					PreviousValue = VARIABLE;
 				}
 				else //This is a parenthesis
@@ -131,4 +134,8 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 		}
 	}
 	return IsValid && ParenthesisMatching == 0;
+}
+
+void Graphing::AddConstantsModelPoint() {
+	model.insertRow(model.rowCount(QModelIndex()));
 }
