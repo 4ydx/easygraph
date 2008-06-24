@@ -115,3 +115,8 @@ QModelIndex ConstantsModel::index(int row, int column,
 		return QModelIndex();
 	return this->createIndex(row, column);
 }
+
+const QList<ConstantsModelPoint> * ConstantsModel::GetConstantValues() const
+{
+	return ConstantValues;	
+}
