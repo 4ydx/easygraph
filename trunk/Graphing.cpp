@@ -39,8 +39,9 @@ void Graphing::EvaluateEquation() {
 
 //Take the users input equation and insert/remove spacing until all tokens have exactly one space between them
 QString Graphing::FormatEquation(QString equation) {
-	//If a number is encountered, the first number must be preceded by a space
-	bool PreviousValueIsNumeric = false;
+	
+	bool PreviousValueIsNumeric = false; //If a number is encountered, the first number must be preceded by a space
+	
 	QString formattedEquation = "";
 	for (int i = 0; i < equation.size(); i++) {
 		bool ok = false;
@@ -89,9 +90,11 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 	bool IsValid = true; //Innocent until proven guilty
 
 	Validation PreviousValue = UNKNOWN;
-	QStringList Tokens = formattedEquation.split(' ');
-
+	bool IndependentVariableFound = false; //Check that the user's entered independent variable exists
+	bool AllConstantsHaveValues = mainWindow.constantsTableView->model()->rowCount(QModelIndex()) == 0; //Look through constants model for presence of key/value pair
 	int ParenthesisMatching = 0; //If non-zero by the end, a parenthesis is missing
+	
+	QStringList Tokens = formattedEquation.split(' ');
 	foreach(QString Token, Tokens)
 	{
 		bool ok = false;
@@ -99,32 +102,37 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 
 		if(ok) //Current value is numeric
 		{
-			if(PreviousValue == VARIABLE)
-			if(IsValid) IsValid = false;
+			if(PreviousValue == VARIABLE)//"a 4" doesn't make sense in the context of an equation
+				if(IsValid) IsValid = false;
 
-			if(PreviousValue == NUMERIC) // "5 34" doesn't make sense in the context of an equation
-			if(IsValid) IsValid = false;
+			if(PreviousValue == NUMERIC) // "5 34" doesn't make sense
+				if(IsValid) IsValid = false;
 
 			PreviousValue = NUMERIC;
 		}
 		else //An operator or a variable
 		{
-			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))
+			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))//operator
 			{
-				if(PreviousValue == OPERATOR) // "+ -" doesn't make sense in an equation
-				if(IsValid) IsValid = false;
+				if(PreviousValue == OPERATOR) // "+ -" doesn't make sense
+					if(IsValid) IsValid = false;
 
 				PreviousValue = OPERATOR;
 			}
-			else
+			else//variable
 			{
 				if(Token != ")" && Token != "(")
 				{
-					if(PreviousValue == NUMERIC) // "5 d" does make sense if "*" is implied.  i don't bother w/ that.
-					if(IsValid) IsValid = false;
+					if(PreviousValue == NUMERIC) // "5 d" does make sense if "*" is implied.  i don't bother w/ that though.
+						if(IsValid) IsValid = false;
 
 					if(PreviousValue == VARIABLE) // "c g" (as variables/constants) doesn't make sense
-					if(IsValid) IsValid = false;
+						if(IsValid) IsValid = false;
+
+					if(Token == mainWindow.independentVariableLineEdit->text().trimmed())
+						IndependentVariableFound = true;
+					
+					
 
 					PreviousValue = VARIABLE;
 				}
@@ -135,7 +143,9 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 			}
 		}
 	}
-	return IsValid && ParenthesisMatching == 0;
+	
+	//TODO: add some error message that indicates what exactly failed
+	return IsValid && ParenthesisMatching == 0 && IndependentVariableFound && AllConstantsHaveValues;
 }
 
 void Graphing::AddConstantsModelPoint() {
