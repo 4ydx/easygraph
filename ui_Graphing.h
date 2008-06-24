@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Tue Jun 24 12:32:32 2008
+** Created: Tue Jun 24 14:17:16 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -104,7 +104,7 @@ public:
     sizePolicy.setHeightForWidth(constantsTableView->sizePolicy().hasHeightForWidth());
     constantsTableView->setSizePolicy(sizePolicy);
     constantsTableView->setMaximumSize(QSize(256, 100));
-    constantsTableView->setSelectionMode(QAbstractItemView::NoSelection);
+    constantsTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     gridLayout->addWidget(constantsTableView, 1, 1, 3, 1);
 
