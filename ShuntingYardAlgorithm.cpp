@@ -31,7 +31,6 @@
 #include "ShuntingYardAlgorithm.h"
 
 #include <iostream>
-#include "ShuntingYardAlgorithm.h"
 
 ShuntingYardAlgorithm::ShuntingYardAlgorithm() {
 	OrderOfOperations.append(QStringList() << "+" << "-");
