@@ -3,6 +3,7 @@
 #include "ShuntingYardAlgorithm.h"
 #include "ReversePolishNotationCalculation.h"
 
+#include <QHeaderView>
 #include <QMessageBox>
 
 Graphing::Graphing() {
@@ -14,6 +15,7 @@ Graphing::~Graphing() {
 void Graphing::initialize(QMainWindow &main) {
 	mainWindow.setupUi(&main);
 	mainWindow.constantsTableView->setModel(&model);
+	mainWindow.constantsTableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 	QObject::connect(mainWindow.addConstantsModelPointPushButton, SIGNAL(clicked()), this, SLOT(AddConstantsModelPoint()));
 	QObject::connect(mainWindow.evaluatePushButton, SIGNAL(clicked()), this, SLOT(EvaluateEquation()));
 	main.show();
@@ -105,7 +107,7 @@ bool Graphing::ValidateEquation(QString formattedEquation) {
 
 			PreviousValue = NUMERIC;
 		}
-		else
+		else //An operator or a variable
 		{
 			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))
 			{

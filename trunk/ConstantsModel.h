@@ -34,6 +34,8 @@ public:
 	bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
 	bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());	
 	
+	const QList<ConstantsModelPoint> * GetConstantValues() const;
+	
 private:
 	//The actual container for the data
 	QList<ConstantsModelPoint> *ConstantValues;

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Tue Jun 24 14:17:16 2008
+** Created: Tue Jun 24 14:47:49 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -35,15 +35,19 @@ public:
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QLineEdit *equationLineEdit;
+    QLabel *label_3;
+    QLineEdit *lineEdit;
     QLabel *label_2;
     QDoubleSpinBox *lowerDoubleSpinBox;
     QDoubleSpinBox *higherDoubleSpinBox;
-    QPushButton *evaluatePushButton;
     QLabel *label;
     QTableView *constantsTableView;
     QSpacerItem *verticalSpacer;
+    QSpacerItem *verticalSpacer_3;
     QPushButton *addConstantsModelPointPushButton;
     QSpacerItem *verticalSpacer_2;
+    QPushButton *evaluatePushButton;
+    QSpacerItem *verticalSpacer_4;
     QLabel *equationLabel;
     QTextBrowser *textBrowser;
     QMenuBar *menubar;
@@ -64,30 +68,37 @@ public:
 
     gridLayout->addWidget(equationLineEdit, 0, 0, 1, 2);
 
-    label_2 = new QLabel(centralwidget);
-    label_2->setObjectName(QString::fromUtf8("label_2"));
+    label_3 = new QLabel(centralwidget);
+    label_3->setObjectName(QString::fromUtf8("label_3"));
     QFont font;
     font.setBold(true);
     font.setWeight(75);
+    label_3->setFont(font);
+
+    gridLayout->addWidget(label_3, 0, 2, 1, 1);
+
+    lineEdit = new QLineEdit(centralwidget);
+    lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
+    lineEdit->setMaximumSize(QSize(50, 16777215));
+
+    gridLayout->addWidget(lineEdit, 0, 3, 1, 1);
+
+    label_2 = new QLabel(centralwidget);
+    label_2->setObjectName(QString::fromUtf8("label_2"));
     label_2->setFont(font);
     label_2->setTextFormat(Qt::PlainText);
 
-    gridLayout->addWidget(label_2, 0, 2, 1, 1);
+    gridLayout->addWidget(label_2, 0, 4, 1, 1);
 
     lowerDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     lowerDoubleSpinBox->setObjectName(QString::fromUtf8("lowerDoubleSpinBox"));
 
-    gridLayout->addWidget(lowerDoubleSpinBox, 0, 3, 1, 1);
+    gridLayout->addWidget(lowerDoubleSpinBox, 0, 5, 1, 1);
 
     higherDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     higherDoubleSpinBox->setObjectName(QString::fromUtf8("higherDoubleSpinBox"));
 
-    gridLayout->addWidget(higherDoubleSpinBox, 0, 4, 1, 1);
-
-    evaluatePushButton = new QPushButton(centralwidget);
-    evaluatePushButton->setObjectName(QString::fromUtf8("evaluatePushButton"));
-
-    gridLayout->addWidget(evaluatePushButton, 0, 5, 1, 1);
+    gridLayout->addWidget(higherDoubleSpinBox, 0, 6, 1, 1);
 
     label = new QLabel(centralwidget);
     label->setObjectName(QString::fromUtf8("label"));
@@ -104,13 +115,19 @@ public:
     sizePolicy.setHeightForWidth(constantsTableView->sizePolicy().hasHeightForWidth());
     constantsTableView->setSizePolicy(sizePolicy);
     constantsTableView->setMaximumSize(QSize(256, 100));
+    constantsTableView->setEditTriggers(QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
+    constantsTableView->setTabKeyNavigation(false);
     constantsTableView->setSelectionMode(QAbstractItemView::SingleSelection);
 
-    gridLayout->addWidget(constantsTableView, 1, 1, 3, 1);
+    gridLayout->addWidget(constantsTableView, 1, 1, 4, 1);
 
     verticalSpacer = new QSpacerItem(20, 97, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer, 1, 2, 3, 1);
+    gridLayout->addItem(verticalSpacer, 1, 2, 4, 1);
+
+    verticalSpacer_3 = new QSpacerItem(72, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    gridLayout->addItem(verticalSpacer_3, 1, 4, 2, 1);
 
     addConstantsModelPointPushButton = new QPushButton(centralwidget);
     addConstantsModelPointPushButton->setObjectName(QString::fromUtf8("addConstantsModelPointPushButton"));
@@ -119,20 +136,34 @@ public:
 
     verticalSpacer_2 = new QSpacerItem(20, 48, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer_2, 3, 0, 1, 1);
+    gridLayout->addItem(verticalSpacer_2, 3, 0, 2, 1);
+
+    evaluatePushButton = new QPushButton(centralwidget);
+    evaluatePushButton->setObjectName(QString::fromUtf8("evaluatePushButton"));
+
+    gridLayout->addWidget(evaluatePushButton, 3, 3, 1, 3);
+
+    verticalSpacer_4 = new QSpacerItem(72, 22, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    gridLayout->addItem(verticalSpacer_4, 4, 4, 1, 1);
 
     equationLabel = new QLabel(centralwidget);
     equationLabel->setObjectName(QString::fromUtf8("equationLabel"));
     equationLabel->setFont(font);
     equationLabel->setAlignment(Qt::AlignCenter);
 
-    gridLayout->addWidget(equationLabel, 4, 0, 1, 6);
+    gridLayout->addWidget(equationLabel, 5, 0, 1, 7);
 
     textBrowser = new QTextBrowser(centralwidget);
     textBrowser->setObjectName(QString::fromUtf8("textBrowser"));
+    QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    sizePolicy1.setHorizontalStretch(0);
+    sizePolicy1.setVerticalStretch(0);
+    sizePolicy1.setHeightForWidth(textBrowser->sizePolicy().hasHeightForWidth());
+    textBrowser->setSizePolicy(sizePolicy1);
     textBrowser->setMinimumSize(QSize(0, 400));
 
-    gridLayout->addWidget(textBrowser, 5, 0, 1, 6);
+    gridLayout->addWidget(textBrowser, 6, 0, 1, 7);
 
     MainWindow->setCentralWidget(centralwidget);
     menubar = new QMenuBar(MainWindow);
@@ -152,10 +183,11 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
     MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+    label_3->setText(QApplication::translate("MainWindow", "Independent Variable:", 0, QApplication::UnicodeUTF8));
     label_2->setText(QApplication::translate("MainWindow", "Range:", 0, QApplication::UnicodeUTF8));
-    evaluatePushButton->setText(QApplication::translate("MainWindow", "Evaluate", 0, QApplication::UnicodeUTF8));
     label->setText(QApplication::translate("MainWindow", "Constants:", 0, QApplication::UnicodeUTF8));
     addConstantsModelPointPushButton->setText(QApplication::translate("MainWindow", "Add Constant", 0, QApplication::UnicodeUTF8));
+    evaluatePushButton->setText(QApplication::translate("MainWindow", "Evaluate", 0, QApplication::UnicodeUTF8));
     equationLabel->setText(QApplication::translate("MainWindow", "Equation", 0, QApplication::UnicodeUTF8));
     Q_UNUSED(MainWindow);
     } // retranslateUi
