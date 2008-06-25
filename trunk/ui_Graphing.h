@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Wed Jun 25 14:11:12 2008
+** Created: Wed Jun 25 18:13:29 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -58,10 +58,10 @@ public:
     {
     if (MainWindow->objectName().isEmpty())
         MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-    MainWindow->resize(800, 613);
+    MainWindow->resize(800, 631);
     centralwidget = new QWidget(MainWindow);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-    centralwidget->setGeometry(QRect(0, 21, 800, 573));
+    centralwidget->setGeometry(QRect(0, 26, 800, 582));
     gridLayout = new QGridLayout(centralwidget);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
     equationLineEdit = new QLineEdit(centralwidget);
@@ -116,9 +116,11 @@ public:
     sizePolicy.setHeightForWidth(constantsTableView->sizePolicy().hasHeightForWidth());
     constantsTableView->setSizePolicy(sizePolicy);
     constantsTableView->setMaximumSize(QSize(256, 100));
-    constantsTableView->setEditTriggers(QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed);
-    constantsTableView->setTabKeyNavigation(false);
-    constantsTableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    constantsTableView->setEditTriggers(QAbstractItemView::DoubleClicked);
+    constantsTableView->setTabKeyNavigation(true);
+    constantsTableView->setProperty("showDropIndicator", QVariant(false));
+    constantsTableView->setDragDropOverwriteMode(false);
+    constantsTableView->setSelectionMode(QAbstractItemView::NoSelection);
 
     gridLayout->addWidget(constantsTableView, 1, 1, 4, 1);
 
@@ -174,11 +176,11 @@ public:
     MainWindow->setCentralWidget(centralwidget);
     menubar = new QMenuBar(MainWindow);
     menubar->setObjectName(QString::fromUtf8("menubar"));
-    menubar->setGeometry(QRect(0, 0, 800, 21));
+    menubar->setGeometry(QRect(0, 0, 800, 26));
     MainWindow->setMenuBar(menubar);
     statusbar = new QStatusBar(MainWindow);
     statusbar->setObjectName(QString::fromUtf8("statusbar"));
-    statusbar->setGeometry(QRect(0, 594, 800, 19));
+    statusbar->setGeometry(QRect(0, 608, 800, 23));
     MainWindow->setStatusBar(statusbar);
 
     retranslateUi(MainWindow);

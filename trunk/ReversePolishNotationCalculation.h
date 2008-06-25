@@ -6,7 +6,7 @@
 #include <QStringList>
 #include <QHash>
 
-
+#include "ConstantsModel.h"
 
 class ReversePolishNotationCalculation
 {
@@ -17,7 +17,10 @@ public:
 	ReversePolishNotationCalculation();
 	~ReversePolishNotationCalculation();
 	
-	double Calculate(QString ReversePolishNotationExpression, QHash<QString, double> IndependentVariables);
+	double Calculate(
+		QString ReversePolishNotationExpression, 
+		ConstantsModelPoint IndependentVariable,
+		const QList<ConstantsModelPoint> *Constants);
 };
 
 #endif /*REVERSEPOLISHNOTATIONCALCULATION_H_*/
