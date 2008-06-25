@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Tue Jun 24 15:38:05 2008
+** Created: Wed Jun 25 14:11:12 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -45,8 +45,9 @@ public:
     QSpacerItem *verticalSpacer;
     QSpacerItem *verticalSpacer_3;
     QPushButton *addConstantsModelPointPushButton;
-    QSpacerItem *verticalSpacer_2;
+    QPushButton *clearConstantsModelPushButton;
     QPushButton *evaluatePushButton;
+    QSpacerItem *verticalSpacer_2;
     QSpacerItem *verticalSpacer_4;
     QLabel *equationLabel;
     QTextBrowser *textBrowser;
@@ -134,14 +135,19 @@ public:
 
     gridLayout->addWidget(addConstantsModelPointPushButton, 2, 0, 1, 1);
 
-    verticalSpacer_2 = new QSpacerItem(20, 48, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    clearConstantsModelPushButton = new QPushButton(centralwidget);
+    clearConstantsModelPushButton->setObjectName(QString::fromUtf8("clearConstantsModelPushButton"));
 
-    gridLayout->addItem(verticalSpacer_2, 3, 0, 2, 1);
+    gridLayout->addWidget(clearConstantsModelPushButton, 3, 0, 1, 1);
 
     evaluatePushButton = new QPushButton(centralwidget);
     evaluatePushButton->setObjectName(QString::fromUtf8("evaluatePushButton"));
 
     gridLayout->addWidget(evaluatePushButton, 3, 3, 1, 3);
+
+    verticalSpacer_2 = new QSpacerItem(20, 48, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+    gridLayout->addItem(verticalSpacer_2, 4, 0, 1, 1);
 
     verticalSpacer_4 = new QSpacerItem(72, 22, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -186,7 +192,8 @@ public:
     label_3->setText(QApplication::translate("MainWindow", "Independent Variable:", 0, QApplication::UnicodeUTF8));
     label_2->setText(QApplication::translate("MainWindow", "Range:", 0, QApplication::UnicodeUTF8));
     label->setText(QApplication::translate("MainWindow", "Constants:", 0, QApplication::UnicodeUTF8));
-    addConstantsModelPointPushButton->setText(QApplication::translate("MainWindow", "Add Constant", 0, QApplication::UnicodeUTF8));
+    addConstantsModelPointPushButton->setText(QApplication::translate("MainWindow", "Add", 0, QApplication::UnicodeUTF8));
+    clearConstantsModelPushButton->setText(QApplication::translate("MainWindow", "Clear", 0, QApplication::UnicodeUTF8));
     evaluatePushButton->setText(QApplication::translate("MainWindow", "Evaluate", 0, QApplication::UnicodeUTF8));
     equationLabel->setText(QApplication::translate("MainWindow", "Equation", 0, QApplication::UnicodeUTF8));
     Q_UNUSED(MainWindow);

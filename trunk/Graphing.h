@@ -6,13 +6,7 @@
 
 #include <QObject>
 
-enum Validation //Used when validating the equation
-{
-	NUMERIC,
-	VARIABLE,
-	OPERATOR,
-	UNKNOWN
-};
+
 
 class Graphing : public QObject
 {
@@ -23,13 +17,12 @@ public:
 	virtual ~Graphing();
 	
 	void initialize(QMainWindow &main);
-	QString FormatEquation(QString equation);
-	bool ValidateEquation(QString formattedEquation);
 	
 public slots:
 	void EvaluateEquation();
 	void AddConstantsModelPoint();
-
+	void ClearConstantsModel();
+	
 public:
 	Ui::MainWindow mainWindow;
 	ConstantsModel model;
