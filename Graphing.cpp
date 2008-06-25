@@ -1,7 +1,7 @@
 #include "Graphing.h"
 
 #include "ShuntingYardAlgorithm.h"
-
+#include "ReversePolishNotationCalculation.h"
 
 #include <QHeaderView>
 #include <QMessageBox>
@@ -29,10 +29,17 @@ void Graphing::EvaluateEquation() {
 		
 	QString ErrorMessage;
 	if (sya.ValidateEquation(equation, this->model, mainWindow.independentVariableLineEdit->text(), ErrorMessage)) {
+		
 		mainWindow.equationLabel->setText("Equation: " + equation);
+		equation =  sya.GenerateReversePolishNotation(equation);
+		
+		ConstantsModelPoint p;
+		ReversePolishNotationCalculation rpn;
+		p.X = mainWindow.independentVariableLineEdit->text();
+		p.Y = 2;
+		double answer = rpn.Calculate(equation, p, model.getConstantValues());
+		mainWindow.textBrowser->setText("Solution: " + QString::number(answer));
 
-		equation = sya.GenerateReversePolishNotation(equation);
-		mainWindow.textBrowser->setText("Equation: " + equation);
 	} else {
 		QMessageBox::critical(
 				0,

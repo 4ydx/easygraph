@@ -6,7 +6,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>613</height>
+    <height>631</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -16,9 +16,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>21</y>
+     <y>26</y>
      <width>800</width>
-     <height>573</height>
+     <height>582</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout" >
@@ -101,13 +101,19 @@
        </size>
       </property>
       <property name="editTriggers" >
-       <set>QAbstractItemView::AnyKeyPressed|QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+       <set>QAbstractItemView::DoubleClicked</set>
       </property>
       <property name="tabKeyNavigation" >
+       <bool>true</bool>
+      </property>
+      <property name="showDropIndicator" stdset="0" >
+       <bool>false</bool>
+      </property>
+      <property name="dragDropOverwriteMode" >
        <bool>false</bool>
       </property>
       <property name="selectionMode" >
-       <enum>QAbstractItemView::SingleSelection</enum>
+       <enum>QAbstractItemView::NoSelection</enum>
       </property>
      </widget>
     </item>
@@ -224,7 +230,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
@@ -232,9 +238,9 @@
    <property name="geometry" >
     <rect>
      <x>0</x>
-     <y>594</y>
+     <y>608</y>
      <width>800</width>
-     <height>19</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

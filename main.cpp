@@ -47,11 +47,11 @@ int main(int argc, char * argv[])
 	
 	QString a = s.GenerateReversePolishNotation((QString("5 + ( ( 1 + 2 ) * 4 ) - 3")));
 	std::cout << "5 + ( ( 1 + 2 ) * 4 ) - 3 ==> " << a.toStdString() << std::endl;
-	std::cout << "Result: " << QString::number(rpc.Calculate(a, QHash<QString, double>())).toStdString() << std::endl;
+	std::cout << "Result: " << QString::number(rpc.Calculate(a, ConstantsModelPoint(), &QList<ConstantsModelPoint>())).toStdString() << std::endl;
 	
 	a = s.GenerateReversePolishNotation((QString("5 ! + ( ( 1 ! + 2 ) ! * 4 ) - 3")));
 	std::cout << "5 ! + ( ( 1 ! + 2 ) ! * 4 ) - 3 ==> " << a.toStdString() << std::endl;
-	std::cout << "Result: " << QString::number(rpc.Calculate(a, QHash<QString, double>())).toStdString() << std::endl;
+	std::cout << "Result: " << QString::number(rpc.Calculate(a, ConstantsModelPoint(), &QList<ConstantsModelPoint>())).toStdString() << std::endl;
 
 	QMainWindow main;
 	Graphing g;

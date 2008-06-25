@@ -14,7 +14,8 @@ ReversePolishNotationCalculation::~ReversePolishNotationCalculation() {
 
 double ReversePolishNotationCalculation::Calculate(
 		QString ReversePolishNotationExpression,
-		QHash<QString, double> IndependentVariables) 
+		ConstantsModelPoint IndependentVariable,
+		const QList<ConstantsModelPoint> *Constants) 
 {
 	QStringList Tokens = ReversePolishNotationExpression.split(' ');
 	QStack<double> Stack;
@@ -56,11 +57,27 @@ double ReversePolishNotationCalculation::Calculate(
 		}
 		else
 		{
-			if(IndependentVariables.size() > 0 && IndependentVariables.contains(Token))
+			bool IndependentVariableFound = false;
+			
+			if(Token == IndependentVariable.X)
 			{
-				Stack.push(IndependentVariables[Token]);								
+				IndependentVariableFound = true;				
+				Stack.push(IndependentVariable.Y);	
 			}
-			else
+			
+			foreach(ConstantsModelPoint point, *Constants)
+			{
+				if(!IndependentVariableFound)
+				{
+					if(point.X == Token)
+					{
+						IndependentVariableFound = true;
+						Stack.push(point.Y);	
+					}						
+				}
+			}
+			
+			if(!IndependentVariableFound)
 			{
 				bool ok = false;
 				double Constant = Token.toDouble(&ok);

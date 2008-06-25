@@ -274,12 +274,12 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 
 	if (ParenthesisMatching != 0)
 		ErrorMessage = "Parenthesis mismatch.";
-	if (!IndependentVariableFound)
-		ErrorMessage
-				= "Please make sure that the independent variable is present in the equation.";
 	if (!AllConstantsHaveValues)
 		ErrorMessage
 				= "Some of the constants in your equation don't have values.";
+	if (!IndependentVariableFound)
+		ErrorMessage
+				= "Please make sure that the independent variable is present in the equation.";
 
 	return IsValid && ParenthesisMatching == 0 && IndependentVariableFound
 			&& AllConstantsHaveValues;
