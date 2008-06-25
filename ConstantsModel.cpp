@@ -96,10 +96,11 @@ bool ConstantsModel::insertRows(int row, int count, const QModelIndex &parent) {
 
 bool ConstantsModel::removeRows(int row, int count, const QModelIndex &parent) {
 	bool Successful = false;
-	if (row < 0 || row > ConstantValues->size()
-)	return false;	
+
+	if( count == 0 ) return true;
+	if (row < 0 || row > ConstantValues->size()) return false;	
 	
-					this->beginRemoveRows(parent, row, row + count - 1);
+	beginRemoveRows(parent, row, row + count - 1);
 	for (int i = row + count - 1; i > row - 1; i--) {
 		ConstantValues->removeAt(i);
 		Successful = true;
@@ -116,7 +117,7 @@ QModelIndex ConstantsModel::index(int row, int column,
 	return this->createIndex(row, column);
 }
 
-const QList<ConstantsModelPoint> * ConstantsModel::GetConstantValues() const
+const QList<ConstantsModelPoint> * ConstantsModel::getConstantValues() const
 {
 	return ConstantValues;	
 }
