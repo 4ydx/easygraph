@@ -59,20 +59,20 @@ double ReversePolishNotationCalculation::Calculate(
 		{
 			bool IndependentVariableFound = false;
 			
-			if(Token == IndependentVariable.X)
+			if(Token == IndependentVariable.VariableName)
 			{
 				IndependentVariableFound = true;				
-				Stack.push(IndependentVariable.Y);	
+				Stack.push(IndependentVariable.Value);	
 			}
 			
 			foreach(ConstantsModelPoint point, *Constants)
 			{
 				if(!IndependentVariableFound)
 				{
-					if(point.X == Token)
+					if(point.VariableName == Token)
 					{
 						IndependentVariableFound = true;
-						Stack.push(point.Y);	
+						Stack.push(point.Value);	
 					}						
 				}
 			}

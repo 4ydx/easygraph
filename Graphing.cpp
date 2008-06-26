@@ -32,14 +32,22 @@ void Graphing::EvaluateEquation() {
 		
 		mainWindow.equationLabel->setText("Equation: " + equation);
 		equation =  sya.GenerateReversePolishNotation(equation);
+		mainWindow.textBrowser->setText(" ==> " + equation + "\n");
+		
+		double low = mainWindow.lowerDoubleSpinBox->text().toDouble();
+		double high = mainWindow.higherDoubleSpinBox->text().toDouble();		
+		double step = (high - low) / 1000; 
 		
 		ConstantsModelPoint p;
+		p.VariableName = mainWindow.independentVariableLineEdit->text();
 		ReversePolishNotationCalculation rpn;
-		p.X = mainWindow.independentVariableLineEdit->text();
-		p.Y = 2;
-		double answer = rpn.Calculate(equation, p, model.getConstantValues());
-		mainWindow.textBrowser->setText("Solution: " + QString::number(answer));
-
+		while(low < high)
+		{
+			p.Value = low;
+			double answer = rpn.Calculate(equation, p, model.getConstantValues());
+			mainWindow.textBrowser->append("X: " + QString::number(low) + " Y: " + QString::number(answer) + "\n");
+			low += step;	
+		}
 	} else {
 		QMessageBox::critical(
 				0,
