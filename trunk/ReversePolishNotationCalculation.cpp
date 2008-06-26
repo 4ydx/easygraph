@@ -3,10 +3,11 @@
 #include <iostream>
 #include <math.h>
 
-QStringList ReversePolishNotationCalculation::PermittedOperators;
+QStringList ReversePolishNotationCalculation::PermittedOperators = QStringList() << "+" << "-" << "*" << "/" << "^" << "!";
 
 ReversePolishNotationCalculation::ReversePolishNotationCalculation() {
-	ReversePolishNotationCalculation::PermittedOperators << "+" << "-" << "*" << "/" << "^" << "!";
+	//Wow...don't ever do something like this again!!!  
+	//ReversePolishNotationCalculation::PermittedOperators << "+" << "-" << "*" << "/" << "^" << "!";
 }
 
 ReversePolishNotationCalculation::~ReversePolishNotationCalculation() {

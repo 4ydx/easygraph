@@ -35,7 +35,10 @@ class ShuntingYardAlgorithm
 		  QString &ErrorMessage);
   
   QString FormatEquation(QString equation);
-  QString GenerateReversePolishNotation(QString equation);
+		  
+  QString GenerateReversePolishNotation(QString equation,
+		  ConstantsModelPoint IndependentVariable,
+		  const QList<ConstantsModelPoint> *Constants);
 
   void Clear();
   void PrintStack(const QStack<QString> &stack, const QString &stackName);

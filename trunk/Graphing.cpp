@@ -29,17 +29,22 @@ void Graphing::EvaluateEquation() {
 		
 	QString ErrorMessage;
 	if (sya.ValidateEquation(equation, this->model, mainWindow.independentVariableLineEdit->text(), ErrorMessage)) {
-		
+
+		ConstantsModelPoint p;
+		p.VariableName = mainWindow.independentVariableLineEdit->text();
+
 		mainWindow.equationLabel->setText("Equation: " + equation);
-		equation =  sya.GenerateReversePolishNotation(equation);
+		equation =  sya.GenerateReversePolishNotation(
+				equation,
+				p,
+				model.getConstantValues());
+		
 		mainWindow.textBrowser->setText(" ==> " + equation + "\n");
 		
 		double low = mainWindow.lowerDoubleSpinBox->text().toDouble();
 		double high = mainWindow.higherDoubleSpinBox->text().toDouble();		
 		double step = (high - low) / 1000; 
 		
-		ConstantsModelPoint p;
-		p.VariableName = mainWindow.independentVariableLineEdit->text();
 		ReversePolishNotationCalculation rpn;
 		while(low < high)
 		{

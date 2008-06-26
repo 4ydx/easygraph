@@ -42,22 +42,10 @@ int main(int argc, char * argv[])
 {
 	QApplication app(argc, argv);
 	
-	ShuntingYardAlgorithm s;
-	ReversePolishNotationCalculation rpc;
-	
-	QString a = s.GenerateReversePolishNotation((QString("5 + ( ( 1 + 2 ) * 4 ) - 3")));
-	std::cout << "5 + ( ( 1 + 2 ) * 4 ) - 3 ==> " << a.toStdString() << std::endl;
-	std::cout << "Result: " << QString::number(rpc.Calculate(a, ConstantsModelPoint(), &QList<ConstantsModelPoint>())).toStdString() << std::endl;
-	
-	a = s.GenerateReversePolishNotation((QString("5 ! + ( ( 1 ! + 2 ) ! * 4 ) - 3")));
-	std::cout << "5 ! + ( ( 1 ! + 2 ) ! * 4 ) - 3 ==> " << a.toStdString() << std::endl;
-	std::cout << "Result: " << QString::number(rpc.Calculate(a, ConstantsModelPoint(), &QList<ConstantsModelPoint>())).toStdString() << std::endl;
-
 	QMainWindow main;
 	Graphing g;
 	g.initialize(main);
 		
 	int ret = app.exec();
-	
 	return ret;
 }
