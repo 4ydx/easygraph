@@ -4,8 +4,8 @@
 #include <iostream>
 
 ConstantsModelPoint::ConstantsModelPoint() {
-	X = "";
-	Y = 0;
+	VariableName = "";
+	Value = 0;
 }
 
 ConstantsModelPoint::~ConstantsModelPoint() {
@@ -33,10 +33,10 @@ QVariant ConstantsModel::data(const QModelIndex &index, int role) const {
 
 	if (role == Qt::DisplayRole) {
 		if (index.column() == 0)
-			return QVariant(ConstantValues->at(index.row()).X);
+			return QVariant(ConstantValues->at(index.row()).VariableName);
 
 		if (index.column() == 1)
-			return QVariant(QString::number(ConstantValues->at(index.row()).Y));
+			return QVariant(QString::number(ConstantValues->at(index.row()).Value));
 	}
 	return QVariant();
 }
@@ -57,13 +57,13 @@ bool ConstantsModel::setData(const QModelIndex &index, const QVariant &Value,
 		ConstantsModelPoint point = ConstantValues->takeAt(index.row());
 
 		if (index.column() == 0) {
-			point.X = Value.toString();
+			point.VariableName = Value.toString();
 			ConstantValues->insert(index.row(), point);
 			emit dataChanged(index, index);
 			return true;
 		}
 		if (index.column() == 1) {
-			point.Y = Value.toDouble();
+			point.Value = Value.toDouble();
 			ConstantValues->insert(index.row(), point);
 			emit dataChanged(index, index);
 			return true;

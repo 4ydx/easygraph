@@ -11,8 +11,8 @@ public:
 	ConstantsModelPoint();
 	~ConstantsModelPoint();
 		
-	QString X;
-	double Y;
+	QString VariableName;
+	double Value;
 };
 
 class ConstantsModel : public QAbstractTableModel
