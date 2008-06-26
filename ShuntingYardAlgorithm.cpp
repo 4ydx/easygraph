@@ -1,6 +1,7 @@
 #include "ShuntingYardAlgorithm.h"
 
 #include "ReversePolishNotationCalculation.h"
+#include "ConstantsModel.h"
 #include <iostream>
 
 ShuntingYardAlgorithm::ShuntingYardAlgorithm() {
@@ -20,10 +21,11 @@ void ShuntingYardAlgorithm::Clear() {
 	MathOperators.clear();
 }
 
-//TODO: This needs to receive all of the variable names as strings in order
-//		to determine what values are non-operators.  otherwise an "x" variable
-//		will end up being compared to integer values...
-QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation) {
+QString ShuntingYardAlgorithm::GenerateReversePolishNotation(
+		QString equation,
+		ConstantsModelPoint IndependentVariable,
+		const QList<ConstantsModelPoint> *Constants)
+{
 	QStringList list = equation.split(" ");
 	for (int i = 0; i < list.count(); i++) {
 
@@ -41,54 +43,76 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation) {
 				Output.push(op);
 			}
 			Output.pop();
-		} else { //Finally we must be dealing with the remaining math operators 
-			if (MathOperators.count() == 0) {
-				MathOperators.push(list[i]);
-			} else if (MathOperators.top() == "(") {
-				MathOperators.push(list[i]);
-			} else {
+		} else { //Either an operator or a variable/constant
 
-				//Determine if the operator in the equation or the operator in the stack
-				//has a higher order of operation
-				int EquationLevel = 0;
-				for (int j = 0; j < OrderOfOperations.count(); j++) {
-					EquationLevel++;
-					if (OrderOfOperations[j].contains(list[i])) {
-						j = OrderOfOperations.count(); //end the loop
+			bool VariableFound = false;
+			if(list[i] == IndependentVariable.VariableName)
+			{
+				Output.push(list[i]);
+				VariableFound = true;
+			}
+			else
+			{
+				foreach(ConstantsModelPoint point, *Constants)
+				{
+					if(point.VariableName == list[i])
+					{
+						Output.push(list[i]);
+						VariableFound = true;
 					}
 				}
+			}
 
-				QString topOperator = MathOperators.top();
-				int StackLevel = 0;
-				for (int j = 0; j < OrderOfOperations.count(); j++) {
-					StackLevel++;
-					if (OrderOfOperations[j].contains(topOperator)) {
-						j = OrderOfOperations.count(); //end the loop
-					}
-				}
-
-				if (EquationLevel > StackLevel) {
+			if(!VariableFound) //Must be an mathematical operator
+			{
+				if (MathOperators.count() == 0) {
 					MathOperators.push(list[i]);
-				}
-				
-				if(list[i] == "+")
-					std::cout << "WTF: " << list[i].toStdString() 
-						<< " " + QString::number(EquationLevel).toStdString()
-						<< " " + topOperator.toStdString() 
-						<< " " + QString::number(StackLevel).toStdString()
-						<< std::endl;
+				} else if (MathOperators.top() == "(") {
+					MathOperators.push(list[i]);
+				} else {
 
-				if (EquationLevel < StackLevel || EquationLevel == StackLevel) {
-					//Right to left are left alone:
-					bool IsRightToLeft = RightToLeftOperations.contains(topOperator);
-									//&& RightToLeftOperations.contains(list[i]);
+					//Determine if the operator in the equation or the operator in the stack
+					//has a higher order of operation
+					int EquationLevel = 0;
+					for (int j = 0; j < OrderOfOperations.count(); j++) {
+						EquationLevel++;
+						if (OrderOfOperations[j].contains(list[i])) {
+							j = OrderOfOperations.count(); //end the loop
+						}
+					}
 
-					if (IsRightToLeft) {
+					QString topOperator = MathOperators.top();
+					int StackLevel = 0;
+					for (int j = 0; j < OrderOfOperations.count(); j++) {
+						StackLevel++;
+						if (OrderOfOperations[j].contains(topOperator)) {
+							j = OrderOfOperations.count(); //end the loop
+						}
+					}
+
+					if (EquationLevel > StackLevel) {
 						MathOperators.push(list[i]);
-					} else {
-						topOperator = MathOperators.pop();
-						Output.push(topOperator);
-						MathOperators.push(list[i]);
+					}
+
+					if(list[i] == "+")
+					std::cout << "WTF: " << list[i].toStdString()
+					<< " " + QString::number(EquationLevel).toStdString()
+					<< " " + topOperator.toStdString()
+					<< " " + QString::number(StackLevel).toStdString()
+					<< std::endl;
+
+					if (EquationLevel < StackLevel || EquationLevel == StackLevel) {
+						//Right to left are left alone:
+						bool IsRightToLeft = RightToLeftOperations.contains(topOperator);
+						//&& RightToLeftOperations.contains(list[i]);
+
+						if (IsRightToLeft) {
+							MathOperators.push(list[i]);
+						} else {
+							topOperator = MathOperators.pop();
+							Output.push(topOperator);
+							MathOperators.push(list[i]);
+						}
 					}
 				}
 			}
@@ -159,10 +183,11 @@ QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 //Return Value: If valid, true.  
 bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 		const ConstantsModel &model, const QString &IndependentVariable,
-		QString &ErrorMessage) 
-{
-	bool IsValid = true; //Innocent until proven guilty
-
+		QString &ErrorMessage) {
+	
+	std::cout << "Equation: " << formattedEquation.toStdString() << std::endl;
+	
+	bool IsValid = true;
 	Validation PreviousValue = UNKNOWN;
 	bool IndependentVariableFound = false; //Check that the user's entered independent variable exists
 	bool AllConstantsHaveValues = true; //Look through constants model for presence of key/value pair
@@ -177,10 +202,14 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 		if(ok) //Current value is numeric
 		{
 			if(PreviousValue == VARIABLE)//"a 4" doesn't make sense in the context of an equation
-			if(IsValid) IsValid = false;
+			{
+				if(IsValid) IsValid = false;
+			}
 
 			if(PreviousValue == NUMERIC) // "5 34" doesn't make sense
-			if(IsValid) IsValid = false;
+			{
+				if(IsValid) IsValid = false;
+			}
 
 			PreviousValue = NUMERIC;
 		}
@@ -189,7 +218,9 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))//operator
 			{
 				if(PreviousValue == OPERATOR) // "+ -" doesn't make sense
-				if(IsValid) IsValid = false;
+				{
+					if(IsValid) IsValid = false;
+				}
 
 				PreviousValue = OPERATOR;
 			}
@@ -198,13 +229,18 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 				if(Token != ")" && Token != "(")
 				{
 					if(PreviousValue == NUMERIC) // "5 d" does make sense if "*" is implied.  i don't bother w/ that though.
-					if(IsValid) IsValid = false;
+					{
+						if(IsValid) IsValid = false;
+					}
 
 					if(PreviousValue == VARIABLE) // "c g" (as variables/constants) doesn't make sense
-					if(IsValid) IsValid = false;
+					{
+						if(IsValid) IsValid = false;
+					}
 
 					if(Token == IndependentVariable)
 					{
+						std::cout << "Ind Var: " << Token.toStdString() << std::endl;
 						IndependentVariableFound = true;
 					}
 					else //Either independent or a constant
@@ -215,6 +251,9 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 						{
 							if(!ConstantFound)
 							{
+								std::cout << (*i).VariableName.toStdString() << std::endl;
+								std::cout << "Token: " << Token.toStdString() << std::endl;
+								
 								ConstantFound = Token == (*i).VariableName;
 							}
 						}
@@ -236,12 +275,12 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 
 	if (ParenthesisMatching != 0)
 		ErrorMessage = "Parenthesis mismatch.";
+	
 	if (!AllConstantsHaveValues)
-		ErrorMessage
-				= "Some of the constants in your equation don't have values.";
+		ErrorMessage = "Some of the constants in your equation don't have values.";
+	
 	if (!IndependentVariableFound)
-		ErrorMessage
-				= "Please make sure that the independent variable is present in the equation.";
+		ErrorMessage = "Please make sure that the independent variable is present in the equation.";
 
 	return IsValid && ParenthesisMatching == 0 && IndependentVariableFound
 			&& AllConstantsHaveValues;
