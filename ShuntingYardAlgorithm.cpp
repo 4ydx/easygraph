@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #include "ShuntingYardAlgorithm.h"
 
 #include "ReversePolishNotationCalculation.h"
@@ -21,11 +25,9 @@ void ShuntingYardAlgorithm::Clear() {
 	MathOperators.clear();
 }
 
-QString ShuntingYardAlgorithm::GenerateReversePolishNotation(
-		QString equation,
+QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
 		ConstantsModelPoint IndependentVariable,
-		const QList<ConstantsModelPoint> *Constants)
-{
+		const QList<ConstantsModelPoint> *Constants) {
 	QStringList list = equation.split(" ");
 	for (int i = 0; i < list.count(); i++) {
 
@@ -43,17 +45,15 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(
 				Output.push(op);
 			}
 			Output.pop();
-		} else { //Either an operator or a variable/constant
+		} else { //Operator or constant/ind. variable
 
 			bool VariableFound = false;
-			if(list[i] == IndependentVariable.VariableName)
+			if (list[i] == IndependentVariable.VariableName) //Independent variable
 			{
 				Output.push(list[i]);
 				VariableFound = true;
-			}
-			else
-			{
-				foreach(ConstantsModelPoint point, *Constants)
+			} else {
+				foreach(ConstantsModelPoint point, *Constants) //Constant
 				{
 					if(point.VariableName == list[i])
 					{
@@ -63,7 +63,7 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(
 				}
 			}
 
-			if(!VariableFound) //Must be an mathematical operator
+			if (!VariableFound) //Must be a mathematical operator
 			{
 				if (MathOperators.count() == 0) {
 					MathOperators.push(list[i]);
@@ -71,47 +71,74 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(
 					MathOperators.push(list[i]);
 				} else {
 
-					//Determine if the operator in the equation or the operator in the stack
-					//has a higher order of operation
-					int EquationLevel = 0;
-					for (int j = 0; j < OrderOfOperations.count(); j++) {
-						EquationLevel++;
-						if (OrderOfOperations[j].contains(list[i])) {
-							j = OrderOfOperations.count(); //end the loop
+					bool NextValueCanBeNegative = false;
+					if (list[i] == "-" && i + 1 < list.count()) { //Attempting to test for negative constants
+
+						list[i + 1].toDouble(&NextValueCanBeNegative); //Test for numeric
+
+						if (!NextValueCanBeNegative) //Test for independent variable
+						{
+							NextValueCanBeNegative
+									= IndependentVariable.VariableName
+											== list[i + 1];
+						}
+
+						if (!NextValueCanBeNegative) //Test for constant value
+						{
+							foreach(ConstantsModelPoint point, *Constants) //Constant
+							{
+								if(point.VariableName == list[i + 1])
+								{
+									NextValueCanBeNegative = true;
+								}
+							}
+						}
+
+						if (NextValueCanBeNegative) {
+							list[i + 1] = "-" + list[i + 1];
+							list[i] = "+";
 						}
 					}
 
-					QString topOperator = MathOperators.top();
-					int StackLevel = 0;
-					for (int j = 0; j < OrderOfOperations.count(); j++) {
-						StackLevel++;
-						if (OrderOfOperations[j].contains(topOperator)) {
-							j = OrderOfOperations.count(); //end the loop
+					if (!NextValueCanBeNegative) {
+						//Determine if the operator in the equation or the operator in the stack
+						//has a higher order of operation
+						int EquationLevel = 0;
+						for (int j = 0; j < OrderOfOperations.count(); j++) {
+							EquationLevel++;
+							if (OrderOfOperations[j].contains(list[i])) {
+								j = OrderOfOperations.count(); //end the loop
+							}
 						}
-					}
 
-					if (EquationLevel > StackLevel) {
-						MathOperators.push(list[i]);
-					}
+						QString topOperator = MathOperators.top();
+						int StackLevel = 0;
+						for (int j = 0; j < OrderOfOperations.count(); j++) {
+							StackLevel++;
+							if (OrderOfOperations[j].contains(topOperator)) {
+								j = OrderOfOperations.count(); //end the loop
+							}
+						}
 
-					if(list[i] == "+")
-					std::cout << "WTF: " << list[i].toStdString()
-					<< " " + QString::number(EquationLevel).toStdString()
-					<< " " + topOperator.toStdString()
-					<< " " + QString::number(StackLevel).toStdString()
-					<< std::endl;
-
-					if (EquationLevel < StackLevel || EquationLevel == StackLevel) {
-						//Right to left are left alone:
-						bool IsRightToLeft = RightToLeftOperations.contains(topOperator);
-						//&& RightToLeftOperations.contains(list[i]);
-
-						if (IsRightToLeft) {
+						if (EquationLevel > StackLevel) {
 							MathOperators.push(list[i]);
-						} else {
-							topOperator = MathOperators.pop();
-							Output.push(topOperator);
-							MathOperators.push(list[i]);
+						}
+
+						if (EquationLevel < StackLevel || EquationLevel
+								== StackLevel) {
+							//If the Top Operator in the list and in the stack are right to left then leave alone.
+							bool
+									IsRightToLeft =
+											RightToLeftOperations.contains(topOperator)
+													&& RightToLeftOperations.contains(list[i]);
+
+							if (IsRightToLeft) {
+								MathOperators.push(list[i]);
+							} else {
+								topOperator = MathOperators.pop();
+								Output.push(topOperator);
+								MathOperators.push(list[i]);
+							}
 						}
 					}
 				}
@@ -132,7 +159,6 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(
 	return ReversePolishNotation.trimmed();
 }
 
-//Take the users input equation and insert/remove spacing until all tokens have exactly one space between them
 QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 
 	bool PreviousValueIsNumeric = false; //If a number is encountered, the first number must be preceded by a space
@@ -151,7 +177,7 @@ QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 
 			PreviousValueIsNumeric = true;
 		} else {
-			if (c != ",") {
+			if (c != ",") { //Ignore commas
 				PreviousValueIsNumeric = false;
 				if (c == ".") //This might be a constant with a decimal
 				{
@@ -179,14 +205,12 @@ QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 	return formattedEquation.trimmed();
 }
 
-//Pass in a formatted equation (single spaces between each token)
-//Return Value: If valid, true.  
 bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 		const ConstantsModel &model, const QString &IndependentVariable,
 		QString &ErrorMessage) {
-	
+
 	std::cout << "Equation: " << formattedEquation.toStdString() << std::endl;
-	
+
 	bool IsValid = true;
 	Validation PreviousValue = UNKNOWN;
 	bool IndependentVariableFound = false; //Check that the user's entered independent variable exists
@@ -217,7 +241,7 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 		{
 			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))//operator
 			{
-				if(PreviousValue == OPERATOR) // "+ -" doesn't make sense
+				if(PreviousValue == OPERATOR && Token != "-") // "5 + * 4" doesn't make sense but "5 + - 4" does => 5 + (-4)
 				{
 					if(IsValid) IsValid = false;
 				}
@@ -253,7 +277,7 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 							{
 								std::cout << (*i).VariableName.toStdString() << std::endl;
 								std::cout << "Token: " << Token.toStdString() << std::endl;
-								
+
 								ConstantFound = Token == (*i).VariableName;
 							}
 						}
@@ -273,14 +297,17 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 		}
 	}
 
+	//TODO: Turn this into mapped values?
 	if (ParenthesisMatching != 0)
 		ErrorMessage = "Parenthesis mismatch.";
-	
+
 	if (!AllConstantsHaveValues)
-		ErrorMessage = "Some of the constants in your equation don't have values.";
-	
+		ErrorMessage
+				= "Some of the constants in your equation don't have values.";
+
 	if (!IndependentVariableFound)
-		ErrorMessage = "Please make sure that the independent variable is present in the equation.";
+		ErrorMessage
+				= "Please make sure that the independent variable is present in the equation.";
 
 	return IsValid && ParenthesisMatching == 0 && IndependentVariableFound
 			&& AllConstantsHaveValues;

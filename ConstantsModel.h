@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #ifndef CONSTANTSMODEL_H_
 #define CONSTANTSMODEL_H_
 

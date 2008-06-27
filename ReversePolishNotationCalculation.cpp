@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #include "ReversePolishNotationCalculation.h"
 
 #include <iostream>
@@ -6,8 +10,6 @@
 QStringList ReversePolishNotationCalculation::PermittedOperators = QStringList() << "+" << "-" << "*" << "/" << "^" << "!";
 
 ReversePolishNotationCalculation::ReversePolishNotationCalculation() {
-	//Wow...don't ever do something like this again!!!  
-	//ReversePolishNotationCalculation::PermittedOperators << "+" << "-" << "*" << "/" << "^" << "!";
 }
 
 ReversePolishNotationCalculation::~ReversePolishNotationCalculation() {
@@ -66,6 +68,12 @@ double ReversePolishNotationCalculation::Calculate(
 				Stack.push(IndependentVariable.Value);	
 			}
 			
+			if(Token == "-" + IndependentVariable.VariableName)
+			{
+				IndependentVariableFound = true;				
+				Stack.push(-1 * IndependentVariable.Value);					
+			}
+			
 			foreach(ConstantsModelPoint point, *Constants)
 			{
 				if(!IndependentVariableFound)
@@ -74,7 +82,13 @@ double ReversePolishNotationCalculation::Calculate(
 					{
 						IndependentVariableFound = true;
 						Stack.push(point.Value);	
-					}						
+					}
+					
+					if("-" + point.VariableName == Token)
+					{
+						IndependentVariableFound = true;
+						Stack.push(-1 * point.Value);	
+					}
 				}
 			}
 			
