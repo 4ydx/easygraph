@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #include "Graphing.h"
 
 #include "ShuntingYardAlgorithm.h"

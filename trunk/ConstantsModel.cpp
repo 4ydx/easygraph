@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #include "ConstantsModel.h"
 
 #include <QList>

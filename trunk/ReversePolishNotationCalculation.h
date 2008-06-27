@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #ifndef REVERSEPOLISHNOTATIONCALCULATION_H_
 #define REVERSEPOLISHNOTATIONCALCULATION_H_
 
@@ -8,6 +12,7 @@
 
 #include "ConstantsModel.h"
 
+/* Takes a Reverse Polish Notation Expression and calculates the resulting value. */
 class ReversePolishNotationCalculation
 {
 public:

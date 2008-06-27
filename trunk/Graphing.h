@@ -1,3 +1,7 @@
+/* Copyright Nathan Findley
+ * Using the GPLv3
+ */
+
 #ifndef GRAPHING_H_
 #define GRAPHING_H_
 
@@ -5,8 +9,6 @@
 #include "ConstantsModel.h"
 
 #include <QObject>
-
-
 
 class Graphing : public QObject
 {
