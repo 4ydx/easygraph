@@ -8,7 +8,7 @@ I recommend using Eclipse with the Qt Eclipse integration plugin.
 
 1) QT (version 4.4 or newer)
 
-Linux:http://trolltech.com/developer/downloads/qt/x11
+http://trolltech.com/developer/downloads/qt/x11
 
 2) Eclipse
 
