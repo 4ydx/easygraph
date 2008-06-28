@@ -7,6 +7,7 @@
 #include "ShuntingYardAlgorithm.h"
 #include "ReversePolishNotationCalculation.h"
 
+#include <QGLWidget>
 #include <QHeaderView>
 #include <QMessageBox>
 
@@ -18,8 +19,13 @@ Graphing::~Graphing() {
 
 void Graphing::initialize(QMainWindow &main) {
 	mainWindow.setupUi(&main);
+
 	mainWindow.constantsTableView->setModel(&model);
 	mainWindow.constantsTableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+
+	mainWindow.graphWidget->Points = new QList<Point>();
+	mainWindow.graphWidget->Range = Point();
+
 	QObject::connect(mainWindow.addConstantsModelPointPushButton, SIGNAL(clicked()), this, SLOT(AddConstantsModelPoint()));
 	QObject::connect(mainWindow.clearConstantsModelPushButton, SIGNAL(clicked()), this, SLOT(ClearConstantsModel()));
 	QObject::connect(mainWindow.evaluatePushButton, SIGNAL(clicked()), this, SLOT(EvaluateEquation()));
@@ -30,7 +36,7 @@ void Graphing::EvaluateEquation() {
 
 	ShuntingYardAlgorithm sya;
 	QString equation = sya.FormatEquation(mainWindow.equationLineEdit->text());
-		
+
 	QString ErrorMessage;
 	if (sya.ValidateEquation(equation, this->model, mainWindow.independentVariableLineEdit->text(), ErrorMessage)) {
 
@@ -42,21 +48,30 @@ void Graphing::EvaluateEquation() {
 				equation,
 				p,
 				model.getConstantValues());
-		
+
 		mainWindow.textBrowser->setText(" ==> " + equation + "\n");
-		
+
 		double low = mainWindow.lowerDoubleSpinBox->text().toDouble();
-		double high = mainWindow.higherDoubleSpinBox->text().toDouble();		
-		double step = (high - low) / 1000; 
-		
+		double high = mainWindow.higherDoubleSpinBox->text().toDouble();
+		double step = (high - low) / 1000;
+
 		ReversePolishNotationCalculation rpn;
 		while(low < high)
 		{
 			p.Value = low;
 			double answer = rpn.Calculate(equation, p, model.getConstantValues());
 			mainWindow.textBrowser->append("X: " + QString::number(low) + " Y: " + QString::number(answer) + "\n");
-			low += step;	
+
+			Point graphPoint(D2);
+			graphPoint.X = low;
+			graphPoint.Y = answer;
+			graphPoints.append(graphPoint);
+			low += step;
 		}
+
+		//Now draw the points to the QWidget
+
+
 	} else {
 		QMessageBox::critical(
 				0,

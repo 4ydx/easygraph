@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Thu Jun 26 13:54:02 2008
+** Created: Sat Jun 28 16:50:42 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -26,6 +26,7 @@
 #include <QtGui/QTableView>
 #include <QtGui/QTextBrowser>
 #include <QtGui/QWidget>
+#include "GraphWidget.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -51,6 +52,7 @@ public:
     QSpacerItem *verticalSpacer_4;
     QLabel *equationLabel;
     QTextBrowser *textBrowser;
+    GraphWidget *graphWidget;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -67,7 +69,7 @@ public:
     equationLineEdit = new QLineEdit(centralwidget);
     equationLineEdit->setObjectName(QString::fromUtf8("equationLineEdit"));
 
-    gridLayout->addWidget(equationLineEdit, 0, 0, 1, 2);
+    gridLayout->addWidget(equationLineEdit, 0, 0, 1, 3);
 
     label_3 = new QLabel(centralwidget);
     label_3->setObjectName(QString::fromUtf8("label_3"));
@@ -76,30 +78,30 @@ public:
     font.setWeight(75);
     label_3->setFont(font);
 
-    gridLayout->addWidget(label_3, 0, 2, 1, 1);
+    gridLayout->addWidget(label_3, 0, 3, 1, 1);
 
     independentVariableLineEdit = new QLineEdit(centralwidget);
     independentVariableLineEdit->setObjectName(QString::fromUtf8("independentVariableLineEdit"));
     independentVariableLineEdit->setMaximumSize(QSize(50, 16777215));
 
-    gridLayout->addWidget(independentVariableLineEdit, 0, 3, 1, 1);
+    gridLayout->addWidget(independentVariableLineEdit, 0, 4, 1, 1);
 
     label_2 = new QLabel(centralwidget);
     label_2->setObjectName(QString::fromUtf8("label_2"));
     label_2->setFont(font);
     label_2->setTextFormat(Qt::PlainText);
 
-    gridLayout->addWidget(label_2, 0, 4, 1, 1);
+    gridLayout->addWidget(label_2, 0, 5, 1, 1);
 
     lowerDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     lowerDoubleSpinBox->setObjectName(QString::fromUtf8("lowerDoubleSpinBox"));
 
-    gridLayout->addWidget(lowerDoubleSpinBox, 0, 5, 1, 1);
+    gridLayout->addWidget(lowerDoubleSpinBox, 0, 6, 1, 1);
 
     higherDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     higherDoubleSpinBox->setObjectName(QString::fromUtf8("higherDoubleSpinBox"));
 
-    gridLayout->addWidget(higherDoubleSpinBox, 0, 6, 1, 1);
+    gridLayout->addWidget(higherDoubleSpinBox, 0, 7, 1, 1);
 
     label = new QLabel(centralwidget);
     label->setObjectName(QString::fromUtf8("label"));
@@ -122,15 +124,15 @@ public:
     constantsTableView->setDragDropOverwriteMode(false);
     constantsTableView->setSelectionMode(QAbstractItemView::NoSelection);
 
-    gridLayout->addWidget(constantsTableView, 1, 1, 4, 1);
+    gridLayout->addWidget(constantsTableView, 1, 1, 4, 2);
 
     verticalSpacer = new QSpacerItem(20, 97, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer, 1, 2, 4, 1);
+    gridLayout->addItem(verticalSpacer, 1, 3, 4, 1);
 
     verticalSpacer_3 = new QSpacerItem(72, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer_3, 1, 4, 2, 1);
+    gridLayout->addItem(verticalSpacer_3, 1, 5, 2, 1);
 
     addConstantsModelPointPushButton = new QPushButton(centralwidget);
     addConstantsModelPointPushButton->setObjectName(QString::fromUtf8("addConstantsModelPointPushButton"));
@@ -145,7 +147,7 @@ public:
     evaluatePushButton = new QPushButton(centralwidget);
     evaluatePushButton->setObjectName(QString::fromUtf8("evaluatePushButton"));
 
-    gridLayout->addWidget(evaluatePushButton, 3, 3, 1, 3);
+    gridLayout->addWidget(evaluatePushButton, 3, 4, 1, 3);
 
     verticalSpacer_2 = new QSpacerItem(20, 48, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
@@ -153,14 +155,14 @@ public:
 
     verticalSpacer_4 = new QSpacerItem(72, 22, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer_4, 4, 4, 1, 1);
+    gridLayout->addItem(verticalSpacer_4, 4, 5, 1, 1);
 
     equationLabel = new QLabel(centralwidget);
     equationLabel->setObjectName(QString::fromUtf8("equationLabel"));
     equationLabel->setFont(font);
     equationLabel->setAlignment(Qt::AlignCenter);
 
-    gridLayout->addWidget(equationLabel, 5, 0, 1, 7);
+    gridLayout->addWidget(equationLabel, 5, 0, 1, 8);
 
     textBrowser = new QTextBrowser(centralwidget);
     textBrowser->setObjectName(QString::fromUtf8("textBrowser"));
@@ -171,7 +173,12 @@ public:
     textBrowser->setSizePolicy(sizePolicy1);
     textBrowser->setMinimumSize(QSize(0, 400));
 
-    gridLayout->addWidget(textBrowser, 6, 0, 1, 7);
+    gridLayout->addWidget(textBrowser, 6, 0, 1, 2);
+
+    graphWidget = new GraphWidget(centralwidget);
+    graphWidget->setObjectName(QString::fromUtf8("graphWidget"));
+
+    gridLayout->addWidget(graphWidget, 6, 2, 1, 6);
 
     MainWindow->setCentralWidget(centralwidget);
     menubar = new QMenuBar(MainWindow);
