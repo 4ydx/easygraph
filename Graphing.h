@@ -11,26 +11,49 @@
 
 #include <QObject>
 
+/*
+
+Author: Nate Findley
+
+Description: The main window for the gui.
+
+08/27/08 -- Added comment
+
+*/
+
 class Graphing : public QObject
 {
-	Q_OBJECT
+  Q_OBJECT
 
-public:
-	Graphing();
-	virtual ~Graphing();
+ public:
 
-	void initialize(QMainWindow &main);
+  Graphing();
+  virtual ~Graphing();
 
-public slots:
-	void EvaluateEquation();
-	void AddConstantsModelPoint();
-	void ClearConstantsModel();
+  /*
+   * Summary:    Sets up the main window.
+   */
+  void initialize(QMainWindow &main);
 
-public:
-	Ui::MainWindow mainWindow;
-	ConstantsModel model;
+  public slots:
 
-	QList<Point> graphPoints;
+  /*
+   * Summary:    Takes the entry in the equation text box and runs the Shunting Yard Algorithm and then evaluates the result.
+   */
+  void EvaluateEquation();
+
+  /*
+   * Summary:    Add another row to the constants model.
+   */
+  void AddConstantsModelPoint();
+
+  void ClearConstantsModel();
+
+ public:
+  Ui::MainWindow mainWindow;
+  ConstantsModel model;
+
+  QList<Point> graphPoints;
 };
 
 #endif /*GRAPHING_H_*/
