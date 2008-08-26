@@ -9,6 +9,16 @@
 #include <QModelIndex>
 #include <QVariant>
 
+/*
+
+Author: Nate Findley
+
+Description: A point in the model that holds constants in the user entered equation.
+
+08/27/08 -- Added comment
+
+*/
+
 class ConstantsModelPoint : public QVariant
 {
 public:
@@ -18,6 +28,17 @@ public:
 	QString VariableName;
 	double Value;
 };
+
+/*
+
+Author: Nate Findley
+
+Description: The model that contains the constant, value pairs e.g. (z, 4) 
+             would be a constant z with value 4 in equation x + z 
+
+08/27/08 -- Added comment
+
+*/
 
 class ConstantsModel : public QAbstractTableModel
 {

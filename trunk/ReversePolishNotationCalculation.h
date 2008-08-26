@@ -12,7 +12,16 @@
 
 #include "ConstantsModel.h"
 
-/* Takes a Reverse Polish Notation Expression and calculates the resulting value. */
+/*
+
+Author: Nate Findley
+
+Description: Takes a Reverse Polish Notation Expression and calculates the resulting value.
+
+08/27/08 -- Updated comment
+
+*/
+
 class ReversePolishNotationCalculation
 {
 public:
