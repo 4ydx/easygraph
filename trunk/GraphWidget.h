@@ -33,7 +33,13 @@ class GraphWidget: public QGLWidget
   void initializeGL();
   void resizeGL( int width, int height );
   void paintGL();
-  void drawGraph(QList<Point> &points, double lowerRange, double upperRange);
+
+  /*
+   * Summary:    Draw the graph from the list of points
+   *
+   * Parameters: The list of points.
+   */
+  void drawGraph(QList<Point> &points);
 	
   QList<Point> *Points;
   Point Range;

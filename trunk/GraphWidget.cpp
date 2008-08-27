@@ -3,12 +3,12 @@
 #include "GraphWidget.h"
 
 GraphWidget::GraphWidget(QWidget * parent)
-	:QGLWidget(parent){
+	:QGLWidget(parent) {
 
   Points = NULL;
 }
 
-GraphWidget::~GraphWidget(){
+GraphWidget::~GraphWidget() {
 }
 
 void GraphWidget::initializeGL() {
@@ -24,12 +24,12 @@ void GraphWidget::initializeGL() {
   glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);  
 }
 
-void GraphWidget::resizeGL( int width, int height ){
+void GraphWidget::resizeGL( int width, int height ) {
 
   height = height?height:1;
 
-  std::cout << "Width: " << QString::number(width).toStdString() 
-	    << "; Height: " << QString::number(height).toStdString() << std::endl;
+  //std::cout << "Width: " << QString::number(width).toStdString() 
+  //	    << "; Height: " << QString::number(height).toStdString() << std::endl;
 
   glViewport( 0, 0, (GLint)width, (GLint)height );
 
@@ -71,13 +71,9 @@ void GraphWidget::paintGL(){
   }
 }
 
-void GraphWidget::drawGraph(QList<Point> &points, double lowerRange, double upperRange) {
+void GraphWidget::drawGraph(QList<Point> &points) {
   
   Points = &points;
-
-  Range.dimensions = D2;
-  Range.X = lowerRange;
-  Range.Y = upperRange;  
 
   updateGL();
 }

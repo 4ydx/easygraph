@@ -72,9 +72,7 @@ void Graphing::EvaluateEquation() {
       }
 
     //Now draw the points to the QGLWidget
-    mainWindow.graphWidget->drawGraph(graphPoints,
-				      mainWindow.lowerDoubleSpinBox->text().toDouble(),
-				      mainWindow.higherDoubleSpinBox->text().toDouble());
+    mainWindow.graphWidget->drawGraph(graphPoints);
 
   } else {
     QMessageBox::critical(

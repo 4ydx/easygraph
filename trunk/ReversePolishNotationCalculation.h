@@ -24,17 +24,21 @@ Description: Takes a Reverse Polish Notation Expression and calculates the resul
 
 class ReversePolishNotationCalculation
 {
-public:
+ public:
 
-	static QStringList PermittedOperators;
+  static QStringList PermittedOperators;
 	
-	ReversePolishNotationCalculation();
-	~ReversePolishNotationCalculation();
-	
-	double Calculate(
-		QString ReversePolishNotationExpression, 
-		ConstantsModelPoint IndependentVariable,
-		const QList<ConstantsModelPoint> *Constants);
+  ReversePolishNotationCalculation();
+  ~ReversePolishNotationCalculation();
+
+  /*
+   * Summary:    Calculate the answer from the Reverse Polish Notation expression
+   *
+   */	
+  double Calculate(
+		   QString ReversePolishNotationExpression, 
+		   ConstantsModelPoint IndependentVariable,
+		   const QList<ConstantsModelPoint> *Constants);
 };
 
 #endif /*REVERSEPOLISHNOTATIONCALCULATION_H_*/
