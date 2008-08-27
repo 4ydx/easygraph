@@ -1,5 +1,7 @@
-1) Constants Table: make editable so that the user can add the "constants" e.g. x, y, c, etc (single char)
+1) Add unit testing to Reverse Polish Notation.
 
-2) Test evaluating using the range and the values entered as constants.
+2) Add grid to graph.
 
-3) Start to look at drawing a graph using opengl.  Probably kind of difficult...
+3) Add dragging to graph using mouse.
+
+4) Clean up the gui in general.
