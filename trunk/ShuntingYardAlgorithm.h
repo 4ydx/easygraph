@@ -69,6 +69,9 @@ class ShuntingYardAlgorithm
 		  ConstantsModelPoint IndependentVariable,
 		  const QList<ConstantsModelPoint> *Constants);
 
+  
+  void GenerateReversePolishNotationHelper(QString item);
+
   /*
    * Summary:    Aids in debugging the state of a stack.
    *
