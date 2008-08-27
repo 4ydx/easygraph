@@ -29,21 +29,22 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
 							     ConstantsModelPoint IndependentVariable,
 							     const QList<ConstantsModelPoint> *Constants) {
   
-  QStringList list = equation.split(" ");
-  for (int i = 0; i < list.count(); i++) {
+  QStringList expressionList = equation.split(" ");
+
+  for (int i = 0; i < expressionList.count(); i++) {
 
     bool ok = false;
-    list[i].toDouble(&ok);
+    expressionList[i].toDouble(&ok);
 
     if (ok) { //This is numeric
 
-      Output.push(list[i]);
+      Output.push(expressionList[i]);
 
-    } else if (list[i] == "(") {
+    } else if (expressionList[i] == "(") {
 
-      MathOperators.push(list[i]);
+      MathOperators.push(expressionList[i]);
 
-    } else if (list[i] == ")") {
+    } else if (expressionList[i] == ")") {
 
       QString op = "";
       while (op != "(") {
@@ -54,21 +55,21 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
       }
       Output.pop();
 
-    } else { //Operator or constant/ind. variable
+    } else { //Operator or constant/independent variable
 
       bool VariableFound = false;
-      if (list[i] == IndependentVariable.VariableName) { //Independent variable
+      if (expressionList[i] == IndependentVariable.VariableName) { //Independent variable
 
-	Output.push(list[i]);
+	Output.push(expressionList[i]);
 	VariableFound = true;
 
       } else {
 
 	foreach(ConstantsModelPoint point, *Constants) { //Constant
 
-	  if(point.VariableName == list[i]) {
+	  if(point.VariableName == expressionList[i]) {
 
-	    Output.push(list[i]);
+	    Output.push(expressionList[i]);
 	    VariableFound = true;
 	  }
 	}
@@ -76,7 +77,7 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
 
       if (!VariableFound) { //Must be a mathematical operator
 
-	if(list[i] == "-") { //Subtraction or simply a negative sign???
+	if(expressionList[i] == "-") { //Testing for subtraction or a negative sign
 
 	  if(i > 0) {
 
@@ -84,41 +85,42 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
 
 	    foreach(QStringList t, OrderOfOperations) {
 
-	      if(t.contains(list[i - 1]) && list[i - 1] != ")" ) {
+	      if(t.contains(expressionList[i - 1]) && expressionList[i - 1] != ")" ) {
 
-		if(!previousIsOperator) list[i + 1] = "-" + list[i + 1];
+		if(!previousIsOperator) expressionList[i + 1] = "-" + expressionList[i + 1];
 		previousIsOperator = true;
 	      }
 	    }
 
 	    if(!previousIsOperator) {
 
-	      GenerateReversePolishNotationHelper(list[i]);
+	      GenerateReversePolishNotationHelper(expressionList[i]);
 	    }
 
-	  } else { 
+	  } else { // this is the first value in the expression e.g. - 5 + x; must be negative sign
 
-	    list[i + 1] = "-" + list[i + 1];	    
+	    expressionList[i + 1] = "-" + expressionList[i + 1];	    
 
 	  }
 
 	} else if (MathOperators.count() == 0) {
 
-	  MathOperators.push(list[i]);
+	  MathOperators.push(expressionList[i]);
 
 	} else if (MathOperators.top() == "(") {
 
-	  MathOperators.push(list[i]);
+	  MathOperators.push(expressionList[i]);
 
 	} else {
 
-	  GenerateReversePolishNotationHelper(list[i]);
+	  GenerateReversePolishNotationHelper(expressionList[i]);
 	}
       }
     }
   }
 
   while (MathOperators.count() > 0) {
+
     Output.push(MathOperators.pop());
   }
 
@@ -127,8 +129,8 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
 
     ReversePolishNotation = ReversePolishNotation + " " + Output.at(k);
   }
-
   this->Clear();
+
   return ReversePolishNotation.trimmed();
 }
 

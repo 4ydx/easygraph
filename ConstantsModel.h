@@ -19,14 +19,14 @@ Description: A point in the model that holds constants in the user entered equat
 
 */
 
-class ConstantsModelPoint : public QVariant
-{
-public:
-	ConstantsModelPoint();
-	~ConstantsModelPoint();
+class ConstantsModelPoint : public QVariant {
+
+ public:
+  ConstantsModelPoint();
+  ~ConstantsModelPoint();
 		
-	QString VariableName;
-	double Value;
+  QString VariableName;
+  double Value;
 };
 
 /*
@@ -40,30 +40,30 @@ Description: The model that contains the constant, value pairs e.g. (z, 4)
 
 */
 
-class ConstantsModel : public QAbstractTableModel
-{
-public:
-	ConstantsModel();
-	virtual ~ConstantsModel();
-	
-	int rowCount(const QModelIndex &parent = QModelIndex()) const;
-	int columnCount(const QModelIndex &parent = QModelIndex()) const;
+class ConstantsModel : public QAbstractTableModel {
 
-	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-	QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-	QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
+ public:
+  ConstantsModel();
+  virtual ~ConstantsModel();
 	
-	Qt::ItemFlags flags(const QModelIndex &index) const;
+  int rowCount(const QModelIndex &parent = QModelIndex()) const;
+  int columnCount(const QModelIndex &parent = QModelIndex()) const;
+
+  QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+  QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
 	
-	bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-	bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
-	bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());	
+  Qt::ItemFlags flags(const QModelIndex &index) const;
 	
-	const QList<ConstantsModelPoint> * getConstantValues() const;
+  bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+  bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
+  bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());	
 	
-private:
-	//The actual container for the data
-	QList<ConstantsModelPoint> *ConstantValues;
+  const QList<ConstantsModelPoint> * getConstantValues() const;
+	
+ private:
+  //The actual container for the data
+  QList<ConstantsModelPoint> *ConstantValues;
 };
 
 #endif /*CONSTANTSMODEL_H_*/
