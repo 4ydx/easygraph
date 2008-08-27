@@ -9,318 +9,318 @@
 #include <iostream>
 
 ShuntingYardAlgorithm::ShuntingYardAlgorithm() {
-	OrderOfOperations.append(QStringList() << "+" << "-");
-	OrderOfOperations.append(QStringList() << "*" << "/");
-	OrderOfOperations.append(QStringList() << "^");
-	OrderOfOperations.append(QStringList() << "!");
+  OrderOfOperations.append(QStringList() << "+" << "-");
+  OrderOfOperations.append(QStringList() << "*" << "/");
+  OrderOfOperations.append(QStringList() << "^");
+  OrderOfOperations.append(QStringList() << "!");
 
-	RightToLeftOperations << "^";
+  RightToLeftOperations << "^";
 }
 
 ShuntingYardAlgorithm::~ShuntingYardAlgorithm() {
 }
 
 void ShuntingYardAlgorithm::Clear() {
-	Output.clear();
-	MathOperators.clear();
+  Output.clear();
+  MathOperators.clear();
 }
 
 QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
-		ConstantsModelPoint IndependentVariable,
-		const QList<ConstantsModelPoint> *Constants) {
-	QStringList list = equation.split(" ");
-	for (int i = 0; i < list.count(); i++) {
+							     ConstantsModelPoint IndependentVariable,
+							     const QList<ConstantsModelPoint> *Constants) {
+  QStringList list = equation.split(" ");
+  for (int i = 0; i < list.count(); i++) {
 
-		bool ok = false;
-		list[i].toDouble(&ok);
+    bool ok = false;
+    list[i].toDouble(&ok);
 
-		if (ok) {
-			Output.push(list[i]);
-		} else if (list[i] == "(") {
-			MathOperators.push(list[i]);
-		} else if (list[i] == ")") {
-			QString op = "";
-			while (op != "(") {
-				op = MathOperators.pop();
-				Output.push(op);
-			}
-			Output.pop();
-		} else { //Operator or constant/ind. variable
+    if (ok) {
+      Output.push(list[i]);
+    } else if (list[i] == "(") {
+      MathOperators.push(list[i]);
+    } else if (list[i] == ")") {
+      QString op = "";
+      while (op != "(") {
+	op = MathOperators.pop();
+	Output.push(op);
+      }
+      Output.pop();
+    } else { //Operator or constant/ind. variable
 
-			bool VariableFound = false;
-			if (list[i] == IndependentVariable.VariableName) //Independent variable
-			{
-				Output.push(list[i]);
-				VariableFound = true;
-			} else {
-				foreach(ConstantsModelPoint point, *Constants) //Constant
-				{
-					if(point.VariableName == list[i])
-					{
-						Output.push(list[i]);
-						VariableFound = true;
-					}
-				}
-			}
+      bool VariableFound = false;
+      if (list[i] == IndependentVariable.VariableName) //Independent variable
+	{
+	  Output.push(list[i]);
+	  VariableFound = true;
+	} else {
+	foreach(ConstantsModelPoint point, *Constants) //Constant
+	  {
+	    if(point.VariableName == list[i])
+	      {
+		Output.push(list[i]);
+		VariableFound = true;
+	      }
+	  }
+      }
 
-			if (!VariableFound) //Must be a mathematical operator
-			{
-				if (MathOperators.count() == 0) {
-					MathOperators.push(list[i]);
-				} else if (MathOperators.top() == "(") {
-					MathOperators.push(list[i]);
-				} else {
+      if (!VariableFound) //Must be a mathematical operator
+	{
+	  if (MathOperators.count() == 0) {
+	    MathOperators.push(list[i]);
+	  } else if (MathOperators.top() == "(") {
+	    MathOperators.push(list[i]);
+	  } else {
 
-					bool NextValueCanBeNegative = false;
-					if (list[i] == "-" && i + 1 < list.count()) { //Attempting to test for negative constants
+	    bool NextValueCanBeNegative = false;
+	    if (list[i] == "-" && i + 1 < list.count()) { //Attempting to test for negative constants
 
-						list[i + 1].toDouble(&NextValueCanBeNegative); //Test for numeric
+	      list[i + 1].toDouble(&NextValueCanBeNegative); //Test for numeric
 
-						if (!NextValueCanBeNegative) //Test for independent variable
-						{
-							NextValueCanBeNegative
-									= IndependentVariable.VariableName
-											== list[i + 1];
-						}
-
-						if (!NextValueCanBeNegative) //Test for constant value
-						{
-							foreach(ConstantsModelPoint point, *Constants) //Constant
-							{
-								if(point.VariableName == list[i + 1])
-								{
-									NextValueCanBeNegative = true;
-								}
-							}
-						}
-
-						if (NextValueCanBeNegative) {
-							list[i + 1] = "-" + list[i + 1];
-							list[i] = "+";
-						}
-					}
-
-					if (!NextValueCanBeNegative) {
-						//Determine if the operator in the equation or the operator in the stack
-						//has a higher order of operation
-						int EquationLevel = 0;
-						for (int j = 0; j < OrderOfOperations.count(); j++) {
-							EquationLevel++;
-							if (OrderOfOperations[j].contains(list[i])) {
-								j = OrderOfOperations.count(); //end the loop
-							}
-						}
-
-						QString topOperator = MathOperators.top();
-						int StackLevel = 0;
-						for (int j = 0; j < OrderOfOperations.count(); j++) {
-							StackLevel++;
-							if (OrderOfOperations[j].contains(topOperator)) {
-								j = OrderOfOperations.count(); //end the loop
-							}
-						}
-
-						if (EquationLevel > StackLevel) {
-							MathOperators.push(list[i]);
-						}
-
-						if (EquationLevel < StackLevel || EquationLevel
-								== StackLevel) {
-							//If the Top Operator in the list and in the stack are right to left then leave alone.
-							bool
-									IsRightToLeft =
-											RightToLeftOperations.contains(topOperator)
-													&& RightToLeftOperations.contains(list[i]);
-
-							if (IsRightToLeft) {
-								MathOperators.push(list[i]);
-							} else {
-								topOperator = MathOperators.pop();
-								Output.push(topOperator);
-								MathOperators.push(list[i]);
-							}
-						}
-					}
-				}
-			}
+	      if (!NextValueCanBeNegative) //Test for independent variable
+		{
+		  NextValueCanBeNegative
+		    = IndependentVariable.VariableName
+		    == list[i + 1];
 		}
-	}
 
-	while (MathOperators.count() > 0) {
-		Output.push(MathOperators.pop());
-	}
+	      if (!NextValueCanBeNegative) //Test for constant value
+		{
+		  foreach(ConstantsModelPoint point, *Constants) //Constant
+		    {
+		      if(point.VariableName == list[i + 1])
+			{
+			  NextValueCanBeNegative = true;
+			}
+		    }
+		}
 
-	QString ReversePolishNotation = "";
-	for (int k = 0; k < Output.count(); k++) {
-		ReversePolishNotation = ReversePolishNotation + " " + Output.at(k);
-	}
+	      if (NextValueCanBeNegative) {
+		list[i + 1] = "-" + list[i + 1];
+		list[i] = "+";
+	      }
+	    }
 
-	this->Clear();
-	return ReversePolishNotation.trimmed();
+	    if (!NextValueCanBeNegative) {
+	      //Determine if the operator in the equation or the operator in the stack
+	      //has a higher order of operation
+	      int EquationLevel = 0;
+	      for (int j = 0; j < OrderOfOperations.count(); j++) {
+		EquationLevel++;
+		if (OrderOfOperations[j].contains(list[i])) {
+		  j = OrderOfOperations.count(); //end the loop
+		}
+	      }
+
+	      QString topOperator = MathOperators.top();
+	      int StackLevel = 0;
+	      for (int j = 0; j < OrderOfOperations.count(); j++) {
+		StackLevel++;
+		if (OrderOfOperations[j].contains(topOperator)) {
+		  j = OrderOfOperations.count(); //end the loop
+		}
+	      }
+
+	      if (EquationLevel > StackLevel) {
+		MathOperators.push(list[i]);
+	      }
+
+	      if (EquationLevel < StackLevel || EquationLevel
+		  == StackLevel) {
+		//If the Top Operator in the list and in the stack are right to left then leave alone.
+		bool
+		  IsRightToLeft =
+		  RightToLeftOperations.contains(topOperator)
+		  && RightToLeftOperations.contains(list[i]);
+
+		if (IsRightToLeft) {
+		  MathOperators.push(list[i]);
+		} else {
+		  topOperator = MathOperators.pop();
+		  Output.push(topOperator);
+		  MathOperators.push(list[i]);
+		}
+	      }
+	    }
+	  }
+	}
+    }
+  }
+
+  while (MathOperators.count() > 0) {
+    Output.push(MathOperators.pop());
+  }
+
+  QString ReversePolishNotation = "";
+  for (int k = 0; k < Output.count(); k++) {
+    ReversePolishNotation = ReversePolishNotation + " " + Output.at(k);
+  }
+
+  this->Clear();
+  return ReversePolishNotation.trimmed();
 }
 
 QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 
-	bool PreviousValueIsNumeric = false; //If a number is encountered, the first number must be preceded by a space
+  bool PreviousValueIsNumeric = false; //If a number is encountered, the first number must be preceded by a space
 
-	QString formattedEquation = "";
-	for (int i = 0; i < equation.size(); i++) {
-		bool ok = false;
-		QString c = QString(equation[i]);
-		int temp = c.toInt(&ok);
+  QString formattedEquation = "";
+  for (int i = 0; i < equation.size(); i++) {
+    bool ok = false;
+    QString c = QString(equation[i]);
+    int temp = c.toInt(&ok);
 
-		if (ok) {
-			if (PreviousValueIsNumeric)
-				formattedEquation += c;
-			else
-				formattedEquation += " " + c;
+    if (ok) {
+      if (PreviousValueIsNumeric)
+	formattedEquation += c;
+      else
+	formattedEquation += " " + c;
 
-			PreviousValueIsNumeric = true;
-		} else {
-			if (c != ",") { //Ignore commas
-				PreviousValueIsNumeric = false;
-				if (c == ".") //This might be a constant with a decimal
-				{
-					if (i + 1 == equation.size())//If this is a constant w/ decimal, needs to have numeric value beyond
-						throw "Poorly formatted equation.";
+      PreviousValueIsNumeric = true;
+    } else {
+      if (c != ",") { //Ignore commas
+	PreviousValueIsNumeric = false;
+	if (c == ".") //This might be a constant with a decimal
+	  {
+	    if (i + 1 == equation.size())//If this is a constant w/ decimal, needs to have numeric value beyond
+	      throw "Poorly formatted equation.";
 
-					ok = false;
-					QString c2 = QString(equation[i + 1]);
-					temp = c2.toInt(&ok);
+	    ok = false;
+	    QString c2 = QString(equation[i + 1]);
+	    temp = c2.toInt(&ok);
 
-					if (!ok) //If ok, simply let this proceed
-					{
-						throw "Poorly formatted equation.";
-					} else {
-						formattedEquation += c;
-					}
-				} else {
-					if (c != " ") {
-						formattedEquation += " " + c;
-					}
-				}
-			}
-		}
+	    if (!ok) //If ok, simply let this proceed
+	      {
+		throw "Poorly formatted equation.";
+	      } else {
+	      formattedEquation += c;
+	    }
+	  } else {
+	  if (c != " ") {
+	    formattedEquation += " " + c;
+	  }
 	}
-	return formattedEquation.trimmed();
+      }
+    }
+  }
+  return formattedEquation.trimmed();
 }
 
 bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
-		const ConstantsModel &model, const QString &IndependentVariable,
-		QString &ErrorMessage) {
+					     const ConstantsModel &model, const QString &IndependentVariable,
+					     QString &ErrorMessage) {
 
-	std::cout << "Equation: " << formattedEquation.toStdString() << std::endl;
+  std::cout << "Equation: " << formattedEquation.toStdString() << std::endl;
 
-	bool IsValid = true;
-	Validation PreviousValue = UNKNOWN;
-	bool IndependentVariableFound = false; //Check that the user's entered independent variable exists
-	bool AllConstantsHaveValues = true; //Look through constants model for presence of key/value pair
-	int ParenthesisMatching = 0; //If non-zero by the end, a parenthesis is missing
+  bool IsValid = true;
+  Validation PreviousValue = UNKNOWN;
+  bool IndependentVariableFound = false; //Check that the user's entered independent variable exists
+  bool AllConstantsHaveValues = true; //Look through constants model for presence of key/value pair
+  int ParenthesisMatching = 0; //If non-zero by the end, a parenthesis is missing
 
-	QStringList Tokens = formattedEquation.split(' ');
-	foreach(QString Token, Tokens)
+  QStringList Tokens = formattedEquation.split(' ');
+  foreach(QString Token, Tokens)
+    {
+      bool ok = false;
+      Token.toInt(&ok);
+
+      if(ok) //Current value is numeric
 	{
-		bool ok = false;
-		Token.toInt(&ok);
+	  if(PreviousValue == VARIABLE)//"a 4" doesn't make sense in the context of an equation
+	    {
+	      if(IsValid) IsValid = false;
+	    }
 
-		if(ok) //Current value is numeric
-		{
-			if(PreviousValue == VARIABLE)//"a 4" doesn't make sense in the context of an equation
-			{
-				if(IsValid) IsValid = false;
-			}
+	  if(PreviousValue == NUMERIC) // "5 34" doesn't make sense
+	    {
+	      if(IsValid) IsValid = false;
+	    }
 
-			if(PreviousValue == NUMERIC) // "5 34" doesn't make sense
-			{
-				if(IsValid) IsValid = false;
-			}
-
-			PreviousValue = NUMERIC;
-		}
-		else //An operator or a variable
-		{
-			if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))//operator
-			{
-				if(PreviousValue == OPERATOR && Token != "-") // "5 + * 4" doesn't make sense but "5 + - 4" does => 5 + (-4)
-				{
-					if(IsValid) IsValid = false;
-				}
-
-				PreviousValue = OPERATOR;
-			}
-			else//variable
-			{
-				if(Token != ")" && Token != "(")
-				{
-					if(PreviousValue == NUMERIC) // "5 d" does make sense if "*" is implied.  i don't bother w/ that though.
-					{
-						if(IsValid) IsValid = false;
-					}
-
-					if(PreviousValue == VARIABLE) // "c g" (as variables/constants) doesn't make sense
-					{
-						if(IsValid) IsValid = false;
-					}
-
-					if(Token == IndependentVariable)
-					{
-						std::cout << "Ind Var: " << Token.toStdString() << std::endl;
-						IndependentVariableFound = true;
-					}
-					else //Either independent or a constant
-					{
-						bool ConstantFound = false;
-						QList<ConstantsModelPoint>::const_iterator i;
-						for(i = model.getConstantValues()->begin(); i < model.getConstantValues()->end(); i++)
-						{
-							if(!ConstantFound)
-							{
-								std::cout << (*i).VariableName.toStdString() << std::endl;
-								std::cout << "Token: " << Token.toStdString() << std::endl;
-
-								ConstantFound = Token == (*i).VariableName;
-							}
-						}
-
-						if(AllConstantsHaveValues) //The instant this goes "bad" they are all bad.
-						{
-							AllConstantsHaveValues = ConstantFound;
-						}
-					}
-					PreviousValue = VARIABLE;
-				}
-				else //This is a parenthesis
-				{
-					ParenthesisMatching += Token == "(" ? 1 : -1;
-				}
-			}
-		}
+	  PreviousValue = NUMERIC;
 	}
+      else //An operator or a variable
+	{
+	  if(ReversePolishNotationCalculation::PermittedOperators.contains(Token))//operator
+	    {
+	      if(PreviousValue == OPERATOR && Token != "-") // "5 + * 4" doesn't make sense but "5 + - 4" does => 5 + (-4)
+		{
+		  if(IsValid) IsValid = false;
+		}
 
-	//TODO: Turn this into mapped values?
-	if (ParenthesisMatching != 0)
-		ErrorMessage = "Parenthesis mismatch.";
+	      PreviousValue = OPERATOR;
+	    }
+	  else//variable
+	    {
+	      if(Token != ")" && Token != "(")
+		{
+		  if(PreviousValue == NUMERIC) // "5 d" does make sense if "*" is implied.  i don't bother w/ that though.
+		    {
+		      if(IsValid) IsValid = false;
+		    }
 
-	if (!AllConstantsHaveValues)
-		ErrorMessage
-				= "Some of the constants in your equation don't have values.";
+		  if(PreviousValue == VARIABLE) // "c g" (as variables/constants) doesn't make sense
+		    {
+		      if(IsValid) IsValid = false;
+		    }
 
-	if (!IndependentVariableFound)
-		ErrorMessage
-				= "Please make sure that the independent variable is present in the equation.";
+		  if(Token == IndependentVariable)
+		    {
+		      std::cout << "Ind Var: " << Token.toStdString() << std::endl;
+		      IndependentVariableFound = true;
+		    }
+		  else //Either independent or a constant
+		    {
+		      bool ConstantFound = false;
+		      QList<ConstantsModelPoint>::const_iterator i;
+		      for(i = model.getConstantValues()->begin(); i < model.getConstantValues()->end(); i++)
+			{
+			  if(!ConstantFound)
+			    {
+			      std::cout << (*i).VariableName.toStdString() << std::endl;
+			      std::cout << "Token: " << Token.toStdString() << std::endl;
 
-	return IsValid && ParenthesisMatching == 0 && IndependentVariableFound
-			&& AllConstantsHaveValues;
+			      ConstantFound = Token == (*i).VariableName;
+			    }
+			}
+
+		      if(AllConstantsHaveValues) //The instant this goes "bad" they are all bad.
+			{
+			  AllConstantsHaveValues = ConstantFound;
+			}
+		    }
+		  PreviousValue = VARIABLE;
+		}
+	      else //This is a parenthesis
+		{
+		  ParenthesisMatching += Token == "(" ? 1 : -1;
+		}
+	    }
+	}
+    }
+
+  //TODO: Turn this into mapped values?
+  if (ParenthesisMatching != 0)
+    ErrorMessage = "Parenthesis mismatch.";
+
+  if (!AllConstantsHaveValues)
+    ErrorMessage
+      = "Some of the constants in your equation don't have values.";
+
+  if (!IndependentVariableFound)
+    ErrorMessage
+      = "Please make sure that the independent variable is present in the equation.";
+
+  return IsValid && ParenthesisMatching == 0 && IndependentVariableFound
+    && AllConstantsHaveValues;
 }
 
 void ShuntingYardAlgorithm::PrintStack(const QStack<QString> &stack,
-		const QString &stackName) {
-	QString currentStack;
+				       const QString &stackName) {
+  QString currentStack;
 
-	for (int i = 0; i < stack.count(); i++) {
-		currentStack = currentStack + " " + stack[i];
-	}
+  for (int i = 0; i < stack.count(); i++) {
+    currentStack = currentStack + " " + stack[i];
+  }
 
-	std::cout << "Current Stack " << stackName.toStdString() << ": "
-			<< currentStack.toStdString() << std::endl;
+  std::cout << "Current Stack " << stackName.toStdString() << ": "
+	    << currentStack.toStdString() << std::endl;
 }
