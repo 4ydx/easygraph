@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Thu Aug 28 00:49:06 2008
+** Created: Tue Sep 2 17:52:57 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -43,13 +43,13 @@ public:
     QDoubleSpinBox *higherDoubleSpinBox;
     QLabel *label;
     QTableView *constantsTableView;
-    QSpacerItem *verticalSpacer;
-    QSpacerItem *verticalSpacer_3;
+    QSpacerItem *spacerItem;
+    QSpacerItem *spacerItem1;
     QPushButton *addConstantsModelPointPushButton;
     QPushButton *clearConstantsModelPushButton;
     QPushButton *evaluatePushButton;
-    QSpacerItem *verticalSpacer_2;
-    QSpacerItem *verticalSpacer_4;
+    QSpacerItem *spacerItem2;
+    QSpacerItem *spacerItem3;
     QLabel *equationLabel;
     QTextBrowser *textBrowser;
     GraphWidget *graphWidget;
@@ -63,7 +63,6 @@ public:
     MainWindow->resize(800, 631);
     centralwidget = new QWidget(MainWindow);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
-    centralwidget->setGeometry(QRect(0, 26, 800, 582));
     gridLayout = new QGridLayout(centralwidget);
     gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
     equationLineEdit = new QLineEdit(centralwidget);
@@ -95,11 +94,13 @@ public:
 
     lowerDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     lowerDoubleSpinBox->setObjectName(QString::fromUtf8("lowerDoubleSpinBox"));
+    lowerDoubleSpinBox->setMinimum(-99.99);
 
     gridLayout->addWidget(lowerDoubleSpinBox, 0, 6, 1, 1);
 
     higherDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     higherDoubleSpinBox->setObjectName(QString::fromUtf8("higherDoubleSpinBox"));
+    higherDoubleSpinBox->setMinimum(-99.99);
 
     gridLayout->addWidget(higherDoubleSpinBox, 0, 7, 1, 1);
 
@@ -126,13 +127,13 @@ public:
 
     gridLayout->addWidget(constantsTableView, 1, 1, 4, 2);
 
-    verticalSpacer = new QSpacerItem(20, 97, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem = new QSpacerItem(20, 97, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer, 1, 3, 4, 1);
+    gridLayout->addItem(spacerItem, 1, 3, 4, 1);
 
-    verticalSpacer_3 = new QSpacerItem(72, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem1 = new QSpacerItem(72, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer_3, 1, 5, 2, 1);
+    gridLayout->addItem(spacerItem1, 1, 5, 2, 1);
 
     addConstantsModelPointPushButton = new QPushButton(centralwidget);
     addConstantsModelPointPushButton->setObjectName(QString::fromUtf8("addConstantsModelPointPushButton"));
@@ -149,13 +150,13 @@ public:
 
     gridLayout->addWidget(evaluatePushButton, 3, 4, 1, 3);
 
-    verticalSpacer_2 = new QSpacerItem(20, 48, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem2 = new QSpacerItem(20, 48, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer_2, 4, 0, 1, 1);
+    gridLayout->addItem(spacerItem2, 4, 0, 1, 1);
 
-    verticalSpacer_4 = new QSpacerItem(72, 22, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    spacerItem3 = new QSpacerItem(72, 22, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-    gridLayout->addItem(verticalSpacer_4, 4, 5, 1, 1);
+    gridLayout->addItem(spacerItem3, 4, 5, 1, 1);
 
     equationLabel = new QLabel(centralwidget);
     equationLabel->setObjectName(QString::fromUtf8("equationLabel"));
@@ -177,6 +178,7 @@ public:
 
     graphWidget = new GraphWidget(centralwidget);
     graphWidget->setObjectName(QString::fromUtf8("graphWidget"));
+    graphWidget->setAcceptDrops(true);
 
     gridLayout->addWidget(graphWidget, 6, 2, 1, 6);
 
@@ -187,7 +189,6 @@ public:
     MainWindow->setMenuBar(menubar);
     statusbar = new QStatusBar(MainWindow);
     statusbar->setObjectName(QString::fromUtf8("statusbar"));
-    statusbar->setGeometry(QRect(0, 608, 800, 23));
     MainWindow->setStatusBar(statusbar);
 
     retranslateUi(MainWindow);
