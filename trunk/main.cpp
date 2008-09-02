@@ -28,6 +28,22 @@
 **
 ****************************************************************************/
 
+/*
+
+Author: Nate Findley
+
+Description:
+
+easygraph is a simple interface for graphing simple algebraic expressions.  Currently sine and
+cosine functionality is not present.  The user can enter an expression using the 
+following operators:  ( ) * + - / ^
+
+Please see the TODO for a list of some of the objectives that need work
+
+08/27/08 -- Added comment
+
+*/
+
 #include "ShuntingYardAlgorithm.h"
 
 #include <QtGui>

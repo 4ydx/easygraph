@@ -9,6 +9,7 @@
 
 #include <qgl.h>
 #include <QWidget>
+#include <QMouseEvent>
 
 /*
 
@@ -44,9 +45,20 @@ class GraphWidget: public QGLWidget
   QList<Point> *Points;
   Point Range;
 
+ protected:
+
+  void mousePressEvent(QMouseEvent * event);
+  void mouseReleaseEvent(QMouseEvent * event);
+  void dragMoveEvent(QDragMoveEvent *event);
+  void dragEnterEvent(QDragEnterEvent *event);
+  void dropEvent(QDropEvent *event);
+
  private:
+
+  const float DEFAULT_DEPTH;
+  float DEFAULT_GRID_COLOR[3];
   
-  void defaultView();
+  void drawGrid();
 };
 
 #endif /*GRAPHWIDGET_H_*/
