@@ -4,7 +4,11 @@
 
 GraphWidget::GraphWidget(QWidget * parent)
   :QGLWidget(parent), 
-   DEFAULT_DEPTH(-25.0) {
+   domainMinimum(0.0), 
+   domainMaximum(0.0), 
+   rangeMinimum(0.0), 
+   rangeMaximum(0.0), 
+   DEFAULT_DEPTH(-20.0) {
 
   DEFAULT_GRID_COLOR[0] = 0.5f;
   DEFAULT_GRID_COLOR[1] = 0.5f;
@@ -17,6 +21,16 @@ GraphWidget::GraphWidget(QWidget * parent)
 }
 
 GraphWidget::~GraphWidget() {
+}
+
+float GraphWidget::GetDomainMinimum() {
+
+  return domainMinimum;
+}
+
+float GraphWidget::GetDomainMaximum() {
+
+  return domainMaximum;
 }
 
 void GraphWidget::initializeGL() {
@@ -34,11 +48,6 @@ void GraphWidget::initializeGL() {
 
 void GraphWidget::resizeGL( int width, int height ) {
 
-  height = height?height:1;
-
-  //std::cout << "Width: " << QString::number(width).toStdString() 
-  //	    << "; Height: " << QString::number(height).toStdString() << std::endl;
-
   glViewport(0, 0, (GLint)width, (GLint)height);
 
   glMatrixMode(GL_PROJECTION);
@@ -51,6 +60,9 @@ void GraphWidget::resizeGL( int width, int height ) {
 
 void GraphWidget::paintGL(){
 
+  SetDomainRange(this->width(), this->height());
+
+  //  glEnable(GL_LINE_SMOOTH);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
   drawGrid();
@@ -66,8 +78,15 @@ void GraphWidget::paintGL(){
       if(Temp != NULL) {
 
 	glBegin(GL_LINES);
-	glVertex3f( Temp->X, Temp->Y, 0.0f);
-	glVertex3f( Points->at(i).X, Points->at(i).Y, 0.0f);
+
+	glVertex3f( Temp->X + centerOffset.X + previousCenterOffset.X, 
+		    Temp->Y + centerOffset.Y + previousCenterOffset.Y, 
+		    0.0f );
+
+	glVertex3f( Points->at(i).X + centerOffset.X + previousCenterOffset.X, 
+		    Points->at(i).Y + centerOffset.Y + previousCenterOffset.Y, 
+		    0.0f);
+
 	glEnd(); 
       }
       Temp = &Points->at(i);
@@ -78,37 +97,31 @@ void GraphWidget::paintGL(){
 void GraphWidget::drawGraph(QList<Point> &points) {
   
   Points = &points;
-
   updateGL();
+}
+
+void GraphWidget::SetDomainRange(int WindowWidth, int WindowHeight) {
+
+  float ReadjustedWidth = -0.5 * (float)WindowWidth / DEFAULT_DEPTH;
+  float ReadjustedHeight = -0.5 * (float)WindowHeight / DEFAULT_DEPTH;
+
+  domainMinimum = (float)-1.0 * ( ReadjustedWidth + ( centerOffset.X + previousCenterOffset.X ) );
+  domainMaximum = ReadjustedWidth - ( centerOffset.X + previousCenterOffset.X );
+
+  rangeMinimum = (float)-1.0 * ( ReadjustedHeight + ( centerOffset.Y + previousCenterOffset.Y ) );
+  rangeMaximum = ReadjustedHeight - ( centerOffset.Y + previousCenterOffset.Y );
 }
 
 void GraphWidget::drawGrid() {
 
   glTranslatef(0.0f, 0.0f, DEFAULT_DEPTH);
 
-  for(int i = 0; i < 30; i++) {
-
-    //Horizontal
-    glBegin(GL_LINES);
-
-    if( i == 10) {
-
-      glColor3f(1,0,0);
-
-    } else {
-
-      glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
-
-    }
-    glVertex3f( -15.0f, 10.0f - i, 0.0f);
-    glVertex3f( 15.0f, 10.0f - i, 0.0f);
-
-    glEnd(); 
+  for(int i = (int)domainMinimum - 1; i <= (int)domainMaximum + 1; i++) {
 
     //Vertical
     glBegin(GL_LINES);
 
-    if( i == 15) {
+    if( i == 0 ) {
 
       glColor3f(1,0,0);
 
@@ -117,8 +130,28 @@ void GraphWidget::drawGrid() {
       glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
 
     }
-    glVertex3f( -15.0f + i, 15.0f, 0.0f);
-    glVertex3f( -15.0f + i, -15.0f, 0.0f);
+    glVertex3f(i + centerOffset.X + previousCenterOffset.X, -1 * (this->width() / DEFAULT_DEPTH), 0.0f);
+    glVertex3f(i + centerOffset.X + previousCenterOffset.X, (this->width() / DEFAULT_DEPTH), 0.0f);
+
+    glEnd(); 
+  }
+
+  for(int i = (int)rangeMinimum - 1; i <= (int)rangeMaximum + 1; i++) {
+
+    //Horizontal
+    glBegin(GL_LINES);
+
+    if( i == 0 ) {
+
+      glColor3f(1,0,0);
+
+    } else {
+
+      glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
+
+    }
+    glVertex3f(-1 * (this->height() / DEFAULT_DEPTH), i + centerOffset.Y + previousCenterOffset.Y, 0.0f);
+    glVertex3f((this->height() / DEFAULT_DEPTH), i + centerOffset.Y + previousCenterOffset.Y, 0.0f);
 
     glEnd(); 
   }
@@ -157,41 +190,44 @@ void GraphWidget::mousePressEvent(QMouseEvent * event) {
   }
   setCursor(Qt::ClosedHandCursor);
 
-  QByteArray array;
+  dragStartPosition.X = event->pos().x();
+  dragStartPosition.Y = event->pos().y();
 
   QDrag *drag = new QDrag(this);
   QMimeData *mimeData = new QMimeData;
 
+  //Dummby data for now...
+  QByteArray array;
   mimeData->setData("application/text", array);
   drag->setMimeData(mimeData);
 
-  Qt::DropAction dropAction = drag->exec(Qt::MoveAction | Qt::CopyAction);
+  drag->exec(Qt::MoveAction | Qt::CopyAction);
 }
 
-void GraphWidget::mouseReleaseEvent(QMouseEvent * event) {
+void GraphWidget::mouseReleaseEvent(QMouseEvent * /*event*/) {
 
-  std::cout << "Mouse release event" << std::endl;
   setCursor(Qt::OpenHandCursor);
 }
 
 void GraphWidget::dragMoveEvent(QDragMoveEvent *event) {
 
-  std::cout << "Drag move event" << std::endl;
-  std::cout << "X: " << event->pos().x() << std::endl;
-  std::cout << "Y: " << event->pos().y() << std::endl;
+  centerOffset.X = ( dragStartPosition.X - event->pos().x() ) / DEFAULT_DEPTH;
+  centerOffset.Y = ( event->pos().y() - dragStartPosition.Y ) / DEFAULT_DEPTH;
+
+  updateGL();
 }
 
 void GraphWidget::dragEnterEvent(QDragEnterEvent *event) {
 
-  std::cout << "Drag enter event" << std::endl;
-  std::cout << "X: " << event->pos().x() << std::endl;
-  std::cout << "Y: " << event->pos().y() << std::endl;
   event->acceptProposedAction();
 }
 
 void GraphWidget::dropEvent(QDropEvent *event) {
 
-  std::cout << "Drop event" << std::endl;
   event->acceptProposedAction();
 
+  previousCenterOffset.X = centerOffset.X + previousCenterOffset.X;
+  previousCenterOffset.Y = centerOffset.Y + previousCenterOffset.Y;
+
+  centerOffset.X = centerOffset.Y = 0; 
 }

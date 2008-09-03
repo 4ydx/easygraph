@@ -11,6 +11,8 @@
 #include <QHeaderView>
 #include <QMessageBox>
 
+#include <iostream>
+
 Graphing::Graphing() {
 }
 
@@ -51,9 +53,22 @@ void Graphing::EvaluateEquation() {
 
     mainWindow.textBrowser->setText(" ==> " + equation + "\n");
 
-    double low = mainWindow.lowerDoubleSpinBox->text().toDouble();
-    double high = mainWindow.higherDoubleSpinBox->text().toDouble();
-    double step = (high - low) / 1000;
+
+    double low, high, step = 0.0;
+
+    if(mainWindow.useRangeCheckBox->isChecked()) {
+
+      low = mainWindow.lowerDoubleSpinBox->text().toDouble();
+      high = mainWindow.higherDoubleSpinBox->text().toDouble();
+      step = (high - low) / 1000;
+
+    } else {
+
+      low = mainWindow.graphWidget->GetDomainMinimum();
+      high = mainWindow.graphWidget->GetDomainMaximum();
+
+      step = (high - low) / 1000;
+    }
 
     ReversePolishNotationCalculation rpn;
     graphPoints.clear();

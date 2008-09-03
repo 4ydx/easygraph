@@ -45,6 +45,16 @@ class GraphWidget: public QGLWidget
   QList<Point> *Points;
   Point Range;
 
+  float GetDomainMinimum();
+  float GetDomainMaximum();
+
+  /*
+   * Summary:    Set the min/max values for the domain and range of the viewspace
+   *
+   * Parameters: The current height and width of the viewspace
+   */  
+  void SetDomainRange(int WindowWidth, int WindowHeight);
+
  protected:
 
   void mousePressEvent(QMouseEvent * event);
@@ -54,6 +64,19 @@ class GraphWidget: public QGLWidget
   void dropEvent(QDropEvent *event);
 
  private:
+
+  /* The upper and lower values for the domain (the x-axis values)
+   *
+   * Set these values based on the current PreviousCenterOffset
+   */
+  float domainMinimum;
+  float domainMaximum;
+  float rangeMinimum;
+  float rangeMaximum;
+
+  Point centerOffset;
+  Point previousCenterOffset;
+  Point dragStartPosition;
 
   const float DEFAULT_DEPTH;
   float DEFAULT_GRID_COLOR[3];

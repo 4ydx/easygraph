@@ -57,6 +57,8 @@ Please see the TODO for a list of some of the objectives that need work
 int main(int argc, char * argv[])
 {
 	QApplication app(argc, argv);
+
+	QGLFormat::setDefaultFormat(QGLFormat(QGL::SampleBuffers));
 	
 	QMainWindow main;
 	Graphing g;
