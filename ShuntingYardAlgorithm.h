@@ -52,11 +52,10 @@ class ShuntingYardAlgorithm
    * Parameters: A formatted equation, the expected constants in the equation, the independent variable, potential error message.
    * Return:     True if a valid equation
    */
-  bool ValidateEquation(
-		  QString formattedEquation, 
-		  const ConstantsModel &ConstantValues, 
-		  const QString &IndependentVariable,
-		  QString &ErrorMessage);
+  bool ValidateEquation(QString formattedEquation, 
+			const ConstantsModel &ConstantValues, 
+			const QString &IndependentVariable,
+			QString &ErrorMessage);
 
   /*
    * Summary:    Reformats the equation so that there are single spaces between elements.
@@ -64,7 +63,7 @@ class ShuntingYardAlgorithm
    * Parameters: The equation to be formatted.
    * Return:     A tolkenized equation (one space between each element). Throws an error if the equation isn't properly formatted.
    */
-  QString FormatEquation(QString equation);
+  QString FormatEquation(QString equation, QString &ErrorMessage);
   
   /*
    * Summary:    Generates the Reverse Polish Notation expression
@@ -73,8 +72,8 @@ class ShuntingYardAlgorithm
    * Return:     The Reverse Polish Notation expression
    */
   QString GenerateReversePolishNotation(QString equation,
-		  ConstantsModelPoint IndependentVariable,
-		  const QList<ConstantsModelPoint> *Constants);
+					ConstantsModelPoint IndependentVariable,
+					const QList<ConstantsModelPoint> *Constants);
   
   void GenerateReversePolishNotationHelper(QString item);
 

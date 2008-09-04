@@ -41,9 +41,18 @@ void Graphing::initialize(QMainWindow &main) {
 void Graphing::EvaluateEquation() {
 
   ShuntingYardAlgorithm sya;
-  QString equation = sya.FormatEquation(mainWindow.equationLineEdit->text());
 
-  QString ErrorMessage;
+  QString ErrorMessage = "";
+  QString equation = sya.FormatEquation(mainWindow.equationLineEdit->text(), ErrorMessage);
+
+  if(ErrorMessage != "") {
+
+    QMessageBox::critical(0,
+			  "Invalid Equation",
+			  ErrorMessage);
+    return;
+  }
+
   if (sya.ValidateEquation(equation, this->model, mainWindow.independentVariableLineEdit->text(), ErrorMessage)) {
 
     ConstantsModelPoint p;

@@ -248,6 +248,18 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>equationLineEdit</tabstop>
+  <tabstop>independentVariableLineEdit</tabstop>
+  <tabstop>addConstantsModelPointPushButton</tabstop>
+  <tabstop>clearConstantsModelPushButton</tabstop>
+  <tabstop>constantsTableView</tabstop>
+  <tabstop>useRangeCheckBox</tabstop>
+  <tabstop>lowerDoubleSpinBox</tabstop>
+  <tabstop>higherDoubleSpinBox</tabstop>
+  <tabstop>evaluatePushButton</tabstop>
+  <tabstop>textBrowser</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

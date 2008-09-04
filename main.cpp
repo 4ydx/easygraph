@@ -54,16 +54,16 @@ Please see the TODO for a list of some of the objectives that need work
 #include "ShuntingYardAlgorithm.h"
 #include "ReversePolishNotationCalculation.h"
 
-int main(int argc, char * argv[])
-{
-	QApplication app(argc, argv);
+int main(int argc, char * argv[]) {
 
-	QGLFormat::setDefaultFormat(QGLFormat(QGL::SampleBuffers));
+  QApplication app(argc, argv);
+
+  QGLFormat::setDefaultFormat(QGLFormat(QGL::SampleBuffers));
 	
-	QMainWindow main;
-	Graphing g;
-	g.initialize(main);
+  QMainWindow main;
+  Graphing g;
+  g.initialize(main);
 		
-	int ret = app.exec();
-	return ret;
+  int ret = app.exec();
+  return ret;
 }
