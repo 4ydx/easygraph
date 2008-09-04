@@ -33,7 +33,6 @@ class ReversePolishNotationCalculation
 
   /*
    * Summary:    Calculate the answer from the Reverse Polish Notation expression
-   *
    */	
   double Calculate(
 		   QString ReversePolishNotationExpression, 

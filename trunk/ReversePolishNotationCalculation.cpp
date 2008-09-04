@@ -32,8 +32,8 @@ double ReversePolishNotationCalculation::Calculate(
 	      for(int i = x - 1; i > 0; i--) {
 
 		x = x * i;
-
 	      }				
+
 	      Stack.push(x);
 
 	    } else {
@@ -56,6 +56,7 @@ double ReversePolishNotationCalculation::Calculate(
 	      else if (Token == "^") {
 		x = pow(x, y); 
 	      }				
+
 	      Stack.push(x);				
 	    }
 
@@ -111,9 +112,10 @@ double ReversePolishNotationCalculation::Calculate(
 	}
     }
 	
-  //Now the stack should contain the answer
-  if(Stack.size() != 1)
+  if(Stack.size() != 1) {//Now the stack should contain the answer
+
     throw "ReversePolishNotationCalculation::Calculate: The stack doesn't contain one value, which is expected.";
+  }
 	
   return Stack.pop();
 }

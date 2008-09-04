@@ -89,6 +89,7 @@ void GraphWidget::paintGL(){
 
 	glEnd(); 
       }
+
       Temp = &Points->at(i);
     }      
   }
@@ -112,74 +113,7 @@ void GraphWidget::SetDomainRange(int WindowWidth, int WindowHeight) {
   rangeMaximum = ReadjustedHeight - ( centerOffset.Y + previousCenterOffset.Y );
 }
 
-void GraphWidget::drawGrid() {
-
-  glTranslatef(0.0f, 0.0f, DEFAULT_DEPTH);
-
-  for(int i = (int)domainMinimum - 1; i <= (int)domainMaximum + 1; i++) {
-
-    //Vertical
-    glBegin(GL_LINES);
-
-    if( i == 0 ) {
-
-      glColor3f(1,0,0);
-
-    } else {
-
-      glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
-
-    }
-    glVertex3f(i + centerOffset.X + previousCenterOffset.X, -1 * (this->width() / DEFAULT_DEPTH), 0.0f);
-    glVertex3f(i + centerOffset.X + previousCenterOffset.X, (this->width() / DEFAULT_DEPTH), 0.0f);
-
-    glEnd(); 
-  }
-
-  for(int i = (int)rangeMinimum - 1; i <= (int)rangeMaximum + 1; i++) {
-
-    //Horizontal
-    glBegin(GL_LINES);
-
-    if( i == 0 ) {
-
-      glColor3f(1,0,0);
-
-    } else {
-
-      glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
-
-    }
-    glVertex3f(-1 * (this->height() / DEFAULT_DEPTH), i + centerOffset.Y + previousCenterOffset.Y, 0.0f);
-    glVertex3f((this->height() / DEFAULT_DEPTH), i + centerOffset.Y + previousCenterOffset.Y, 0.0f);
-
-    glEnd(); 
-  }
-}
-
-/*
-void GraphWidget::defaultView() {
-
-  glTranslatef(-1.5f,0.0f,-6.0f);
-
-  glBegin(GL_TRIANGLES);
-  glVertex3f( 0.0f, 1.0f, 0.0f);
-  glVertex3f(-1.0f,-1.0f, 0.0f);
-  glVertex3f( 1.0f,-1.0f, 0.0f);
-  glEnd(); 
-
-  glTranslatef(3.0f,0.0f,0.0f);
-
-  glBegin(GL_QUADS);
-  glVertex3f(-1.0f, 1.0f, 0.0f);
-  glVertex3f( 1.0f, 1.0f, 0.0f);
-  glVertex3f( 1.0f,-1.0f, 0.0f);
-  glVertex3f(-1.0f,-1.0f, 0.0f);
-  glEnd();   
-}
-*/
-
-//-------- PROTECTED -----------
+//----------- PROTECTED
 
 void GraphWidget::mousePressEvent(QMouseEvent * event) {
 
@@ -230,4 +164,51 @@ void GraphWidget::dropEvent(QDropEvent *event) {
   previousCenterOffset.Y = centerOffset.Y + previousCenterOffset.Y;
 
   centerOffset.X = centerOffset.Y = 0; 
+}
+
+// ------------------ PRIVATE
+
+void GraphWidget::drawGrid() {
+
+  glTranslatef(0.0f, 0.0f, DEFAULT_DEPTH);
+
+  for(int i = (int)domainMinimum - 1; i <= (int)domainMaximum + 1; i++) {
+
+    //Vertical Lines
+    glBegin(GL_LINES);
+
+    if( i == 0 ) {
+
+      glColor3f(1,0,0);
+
+    } else {
+
+      glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
+
+    }
+    glVertex3f(i + centerOffset.X + previousCenterOffset.X, -1 * (this->width() / DEFAULT_DEPTH), 0.0f);
+    glVertex3f(i + centerOffset.X + previousCenterOffset.X, (this->width() / DEFAULT_DEPTH), 0.0f);
+
+    glEnd(); 
+  }
+
+  for(int i = (int)rangeMinimum - 1; i <= (int)rangeMaximum + 1; i++) {
+
+    //Horizontal Lines
+    glBegin(GL_LINES);
+
+    if( i == 0 ) {
+
+      glColor3f(1,0,0);
+
+    } else {
+
+      glColor3f(DEFAULT_GRID_COLOR[0],DEFAULT_GRID_COLOR[1],DEFAULT_GRID_COLOR[2]);
+
+    }
+    glVertex3f(-1 * (this->height() / DEFAULT_DEPTH), i + centerOffset.Y + previousCenterOffset.Y, 0.0f);
+    glVertex3f((this->height() / DEFAULT_DEPTH), i + centerOffset.Y + previousCenterOffset.Y, 0.0f);
+
+    glEnd(); 
+  }
 }

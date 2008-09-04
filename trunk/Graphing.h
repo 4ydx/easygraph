@@ -42,11 +42,7 @@ class Graphing : public QObject
    */
   void EvaluateEquation();
 
-  /*
-   * Summary:    Add another row to the constants model.
-   */
   void AddConstantsModelPoint();
-
   void ClearConstantsModel();
 
  public:

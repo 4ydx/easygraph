@@ -26,11 +26,10 @@ void Graphing::initialize(QMainWindow &main) {
   mainWindow.constantsTableView->setModel(&model);
   mainWindow.constantsTableView->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 
-  //  mainWindow.graphWidget->Points = new QList<Point>();
-
   QObject::connect(mainWindow.addConstantsModelPointPushButton, SIGNAL(clicked()), this, SLOT(AddConstantsModelPoint()));
   QObject::connect(mainWindow.clearConstantsModelPushButton, SIGNAL(clicked()), this, SLOT(ClearConstantsModel()));
   QObject::connect(mainWindow.evaluatePushButton, SIGNAL(clicked()), this, SLOT(EvaluateEquation()));
+
   main.show();
 }
 

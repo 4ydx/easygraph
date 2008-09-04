@@ -8,52 +8,66 @@
 #include <iostream>
 
 ConstantsModelPoint::ConstantsModelPoint() {
-	VariableName = "";
-	Value = 0;
+
+  VariableName = "";
+  Value = 0;
 }
 
 ConstantsModelPoint::~ConstantsModelPoint() {
 }
 
 ConstantsModel::ConstantsModel() {
-	ConstantValues = new QList<ConstantsModelPoint>();
+
+  ConstantValues = new QList<ConstantsModelPoint>();
 }
 
 ConstantsModel::~ConstantsModel() {
-	delete ConstantValues;
+
+  delete ConstantValues;
 }
 
-int ConstantsModel::columnCount(const QModelIndex &parent) const {
-	return 2;
+int ConstantsModel::columnCount(const QModelIndex & /* parent */) const {
+
+  return 2;
 }
 
-int ConstantsModel::rowCount(const QModelIndex &parent) const {
-	return ConstantValues->size();
+int ConstantsModel::rowCount(const QModelIndex & /* parent */) const {
+  
+  return ConstantValues->size();
 }
 
 QVariant ConstantsModel::data(const QModelIndex &index, int role) const {
 
-	if (!index.isValid())
-		return QVariant();
+  if (!index.isValid()) {
 
-	if (role == Qt::DisplayRole) {
-		if (index.column() == 0)
-			return QVariant(ConstantValues->at(index.row()).VariableName);
+    return QVariant();
+  }
 
-		if (index.column() == 1)
-			return QVariant(QString::number(ConstantValues->at(index.row()).Value));
-	}
-	return QVariant();
+  if (role == Qt::DisplayRole) {
+
+    if (index.column() == 0) {
+
+      return QVariant(ConstantValues->at(index.row()).VariableName);
+    }
+
+    if (index.column() == 1) {
+
+      return QVariant(QString::number(ConstantValues->at(index.row()).Value));
+    }
+  }
+  return QVariant();
 }
 
-QVariant ConstantsModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant ConstantsModel::headerData(int section, Qt::Orientation /* orientation */, int /* role */) const {
 
   if (section == 0) {
+
     return "Constant";
   }
 
   if (section == 1) {
-		return "Value";
+
+    return "Value";
   }
 
   return "";
@@ -96,9 +110,13 @@ Qt::ItemFlags ConstantsModel::flags(const QModelIndex &index) const {
 
 bool ConstantsModel::insertRows(int row, int count, const QModelIndex &parent) {
 
+  if (row < 0 || row > ConstantValues->size()) {
+
+    return false;
+  }
+
   bool Successful = false;
-  if (row < 0 || row > ConstantValues->size()) return false;
-	
+
   this->beginInsertRows(parent, row, row + count - 1);
 
   for (int i = row; i < row + count; i++) {
@@ -106,16 +124,25 @@ bool ConstantsModel::insertRows(int row, int count, const QModelIndex &parent) {
     ConstantValues->insert(i, ConstantsModelPoint());
     Successful = true;
   }
+
   this->endInsertRows();
 
   return Successful;
 }
 
 bool ConstantsModel::removeRows(int row, int count, const QModelIndex &parent) {
+
   bool Successful = false;
 
-  if( count == 0 ) return true;
-  if (row < 0 || row > ConstantValues->size()) return false;	
+  if( count == 0 ) {
+
+    return true;
+  }
+
+  if (row < 0 || row > ConstantValues->size()) {
+
+    return false;	
+  }
 	
   beginRemoveRows(parent, row, row + count - 1);
 
@@ -124,6 +151,7 @@ bool ConstantsModel::removeRows(int row, int count, const QModelIndex &parent) {
     ConstantValues->removeAt(i);
     Successful = true;
   }
+
   this->endRemoveRows();
 
   return Successful;
