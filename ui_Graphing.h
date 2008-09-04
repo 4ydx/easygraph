@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading ui file 'Graphing.ui'
 **
-** Created: Wed Sep 3 23:00:29 2008
+** Created: Thu Sep 4 23:32:40 2008
 **      by: Qt User Interface Compiler version 4.4.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
@@ -37,6 +37,7 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actionQuit;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QGridLayout *gridLayout1;
@@ -67,6 +68,8 @@ public:
     if (MainWindow->objectName().isEmpty())
         MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
     MainWindow->resize(800, 631);
+    actionQuit = new QAction(MainWindow);
+    actionQuit->setObjectName(QString::fromUtf8("actionQuit"));
     centralwidget = new QWidget(MainWindow);
     centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
     gridLayout = new QGridLayout(centralwidget);
@@ -146,12 +149,14 @@ public:
     hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
     lowerDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     lowerDoubleSpinBox->setObjectName(QString::fromUtf8("lowerDoubleSpinBox"));
+    lowerDoubleSpinBox->setEnabled(false);
     lowerDoubleSpinBox->setMinimum(-99.99);
 
     hboxLayout->addWidget(lowerDoubleSpinBox);
 
     higherDoubleSpinBox = new QDoubleSpinBox(centralwidget);
     higherDoubleSpinBox->setObjectName(QString::fromUtf8("higherDoubleSpinBox"));
+    higherDoubleSpinBox->setEnabled(false);
     higherDoubleSpinBox->setMinimum(-99.99);
 
     hboxLayout->addWidget(higherDoubleSpinBox);
@@ -207,6 +212,7 @@ public:
     MainWindow->addToolBar(Qt::TopToolBarArea, toolBar);
 
     menubar->addAction(menuQuit->menuAction());
+    menuQuit->addAction(actionQuit);
 
     retranslateUi(MainWindow);
 
@@ -216,6 +222,7 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
     MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0, QApplication::UnicodeUTF8));
+    actionQuit->setText(QApplication::translate("MainWindow", "Quit", 0, QApplication::UnicodeUTF8));
     label->setText(QApplication::translate("MainWindow", "Constants:", 0, QApplication::UnicodeUTF8));
     addConstantsModelPointPushButton->setText(QApplication::translate("MainWindow", "Add", 0, QApplication::UnicodeUTF8));
     clearConstantsModelPushButton->setText(QApplication::translate("MainWindow", "Clear", 0, QApplication::UnicodeUTF8));
@@ -223,7 +230,7 @@ public:
     useRangeCheckBox->setText(QApplication::translate("MainWindow", "Use The Following Range:", 0, QApplication::UnicodeUTF8));
     evaluatePushButton->setText(QApplication::translate("MainWindow", "Evaluate", 0, QApplication::UnicodeUTF8));
     equationLabel->setText(QApplication::translate("MainWindow", "Equation", 0, QApplication::UnicodeUTF8));
-    menuQuit->setTitle(QApplication::translate("MainWindow", "Quit", 0, QApplication::UnicodeUTF8));
+    menuQuit->setTitle(QApplication::translate("MainWindow", "Menu", 0, QApplication::UnicodeUTF8));
     toolBar->setWindowTitle(QApplication::translate("MainWindow", "toolBar", 0, QApplication::UnicodeUTF8));
     } // retranslateUi
 

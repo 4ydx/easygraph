@@ -129,6 +129,9 @@
        <layout class="QHBoxLayout" >
         <item>
          <widget class="QDoubleSpinBox" name="lowerDoubleSpinBox" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="minimum" >
            <double>-99.989999999999995</double>
           </property>
@@ -136,6 +139,9 @@
         </item>
         <item>
          <widget class="QDoubleSpinBox" name="higherDoubleSpinBox" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
           <property name="minimum" >
            <double>-99.989999999999995</double>
           </property>

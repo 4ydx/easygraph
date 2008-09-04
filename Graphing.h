@@ -50,6 +50,10 @@ class Graphing : public QObject
   ConstantsModel model;
 
   QList<Point> graphPoints;
+
+ public slots:
+  void ReevaluateEquation();
+
 };
 
 #endif /*GRAPHING_H_*/
