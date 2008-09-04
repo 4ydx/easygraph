@@ -14,10 +14,10 @@
 
 enum Validation //Used when validating the equation
 {
-	NUMERIC,
-	VARIABLE,
-	OPERATOR,
-	UNKNOWN
+  NUMERIC,
+  VARIABLE,
+  OPERATOR,
+  UNKNOWN
 };
 
 /*
@@ -37,9 +37,12 @@ class ShuntingYardAlgorithm
   ShuntingYardAlgorithm();
   ~ShuntingYardAlgorithm();
 
+  /* Operation priority increases with each index position in the QList */
   QList<QStringList> OrderOfOperations;
+
   QStringList RightToLeftOperations;
 
+  /* Output and MathOperators store tokens during the construction of the Reverse Polish Notation expression*/
   QStack<QString> Output;
   QStack<QString> MathOperators;
 
@@ -54,7 +57,6 @@ class ShuntingYardAlgorithm
 		  const ConstantsModel &ConstantValues, 
 		  const QString &IndependentVariable,
 		  QString &ErrorMessage);
-  
 
   /*
    * Summary:    Reformats the equation so that there are single spaces between elements.
@@ -63,12 +65,16 @@ class ShuntingYardAlgorithm
    * Return:     A tolkenized equation (one space between each element). Throws an error if the equation isn't properly formatted.
    */
   QString FormatEquation(QString equation);
-		  
   
+  /*
+   * Summary:    Generates the Reverse Polish Notation expression
+   *
+   * Parameters: The previously formatted equation, the independent variable, all constants
+   * Return:     The Reverse Polish Notation expression
+   */
   QString GenerateReversePolishNotation(QString equation,
 		  ConstantsModelPoint IndependentVariable,
 		  const QList<ConstantsModelPoint> *Constants);
-
   
   void GenerateReversePolishNotationHelper(QString item);
 

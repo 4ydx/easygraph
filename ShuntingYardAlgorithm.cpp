@@ -9,6 +9,7 @@
 #include <iostream>
 
 ShuntingYardAlgorithm::ShuntingYardAlgorithm() {
+
   OrderOfOperations.append(QStringList() << "+" << "-");
   OrderOfOperations.append(QStringList() << "*" << "/");
   OrderOfOperations.append(QStringList() << "^");
@@ -21,6 +22,7 @@ ShuntingYardAlgorithm::~ShuntingYardAlgorithm() {
 }
 
 void ShuntingYardAlgorithm::Clear() {
+
   Output.clear();
   MathOperators.clear();
 }
@@ -202,7 +204,7 @@ QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 
     bool ok = false;
     QString c = QString(equation[i]);
-    int temp = c.toInt(&ok);
+    c.toInt(&ok);
 
     if (ok) {
 
@@ -224,23 +226,25 @@ QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 	PreviousValueIsNumeric = false;
 	if (c == ".") { //This might be a constant with a decimal
 
-	    if (i + 1 == equation.size())//If this is a constant w/ decimal, needs to have numeric value beyond
-	      throw "Poorly formatted equation.";
+	  if (i + 1 == equation.size()) {//If this is a constant w/ decimal, needs to have numeric value beyond
 
-	    ok = false;
-	    QString c2 = QString(equation[i + 1]);
-	    temp = c2.toInt(&ok);
+	    throw "Poorly formatted equation.";
+	  }
 
-	    if (!ok) { //If ok, simply let this proceed
+	  ok = false;
+	  QString c2 = QString(equation[i + 1]);
+	  c2.toInt(&ok);
 
-		throw "Poorly formatted equation.";
+	  if (!ok) { //If ok, simply let this proceed
 
-	      } else {
-
-	      formattedEquation += c;
-	    }
+	    throw "Poorly formatted equation.";
 
 	  } else {
+
+	    formattedEquation += c;
+	  }
+
+	} else {
 
 	  if (c != " ") {
 
@@ -260,9 +264,12 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
 
   bool IsValid = true;
   Validation PreviousValue = UNKNOWN;
-  bool IndependentVariableFound = false; //Check that the user's entered independent variable exists
-  bool AllConstantsHaveValues = true; //Look through constants model for presence of key/value pair
-  int ParenthesisMatching = 0; //If non-zero by the end, a parenthesis is missing
+
+  bool IndependentVariableFound = false; // Check that the user's entered independent variable exists
+
+  bool AllConstantsHaveValues = true;    // Look through constants model for presence of key/value pair
+
+  int ParenthesisMatching = 0;           // If non-zero by the end, a parenthesis is missing
 
   QStringList Tokens = formattedEquation.split(' ');
   foreach(QString Token, Tokens) {
@@ -341,18 +348,23 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
     }
   }
 
-  //TODO: Turn this into mapped values?
-  if (ParenthesisMatching != 0)
+
+  if (ParenthesisMatching != 0) {
+
     ErrorMessage = "Parenthesis mismatch.";
+  }
 
-  if (!AllConstantsHaveValues)
+  if (!AllConstantsHaveValues) {
+
     ErrorMessage = "Some of the constants in your equation don't have values.";
+  }
 
-  if (!IndependentVariableFound)
+  if (!IndependentVariableFound) {
+
     ErrorMessage = "Please make sure that the independent variable is present in the equation.";
+  }
 
-  return IsValid && ParenthesisMatching == 0 && IndependentVariableFound
-    && AllConstantsHaveValues;
+  return IsValid && ParenthesisMatching == 0 && IndependentVariableFound && AllConstantsHaveValues;
 }
 
 void ShuntingYardAlgorithm::PrintStack(const QStack<QString> &stack,
