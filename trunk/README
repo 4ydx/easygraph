@@ -1,6 +1,15 @@
-Make sure to add QT += opengl to the pro file when compiling.
+-- Compiling the project:
 
-TODO:
+1) Make sure to add QT += opengl to the pro file or `qmake -project "QT += opengl"`
+2) Remove the Test*.cpp and Test*.moc lines from the pro file
+
+-- Testing the project:
+
+1) Make sure to add CONFIG += qtestlib to the pro file or `qmake -project "QT += qtestlib"`
+2) Make sure to add QT += opengl to the pro file
+3) Remove main.cpp from the SOURCES list in the pro file
+
+-- TODO:
 
 1) Threading for the equation calculation so that no hiccup occurs when dragging
 

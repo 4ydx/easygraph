@@ -138,6 +138,12 @@ QString ShuntingYardAlgorithm::GenerateReversePolishNotation(QString equation,
 
 void ShuntingYardAlgorithm::GenerateReversePolishNotationHelper(QString item) {
 
+  if(MathOperators.count() == 0) {
+
+    MathOperators.push(item);
+    return;
+  }
+
   //Determine if the operator in the equation or the operator in the stack
   //has a higher order of operation
   int EquationLevel = 0;
@@ -151,13 +157,6 @@ void ShuntingYardAlgorithm::GenerateReversePolishNotationHelper(QString item) {
   }
 
   int StackLevel = 0;
-
-  if(MathOperators.count() == 0) {
-
-    MathOperators.push(item);
-    return;
-  }
-
   QString topOperator = MathOperators.top();
   for (int j = 0; j < OrderOfOperations.count(); j++) {
 
@@ -171,31 +170,26 @@ void ShuntingYardAlgorithm::GenerateReversePolishNotationHelper(QString item) {
   if (EquationLevel > StackLevel) {
 
     MathOperators.push(item);
-  }
 
-  if (EquationLevel < StackLevel || EquationLevel == StackLevel) {
+  } else {
 
     //If the Top Operator in the list and in the stack are right to left then leave alone.
     bool IsRightToLeft = RightToLeftOperations.contains(topOperator) && RightToLeftOperations.contains(item);
 
-    if (IsRightToLeft) {
+    if (IsRightToLeft || MathOperators.top() == "(") {
 
       MathOperators.push(item);
 
     } else {
 
-      if(MathOperators.count() > 0 && MathOperators.top() != "(" ) {
-
-	topOperator = MathOperators.pop();
-	Output.push(topOperator);
-      }
-
+      topOperator = MathOperators.pop();
+      Output.push(topOperator);
       MathOperators.push(item);
     }
   }
 }
 
-QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
+QString ShuntingYardAlgorithm::FormatEquation(QString equation, QString &ErrorMessage) {
 
   bool PreviousValueIsNumeric = false; //If a number is encountered, the first number must be preceded by a space
 
@@ -223,29 +217,37 @@ QString ShuntingYardAlgorithm::FormatEquation(QString equation) {
 
       if (c != ",") { //Ignore commas
 
-	PreviousValueIsNumeric = false;
 	if (c == ".") { //This might be a constant with a decimal
+
+	  if(PreviousValueIsNumeric == false) {
+
+	    ErrorMessage = "Poorly formatted equation.";
+	  }
 
 	  if (i + 1 == equation.size()) {//If this is a constant w/ decimal, needs to have numeric value beyond
 
-	    throw "Poorly formatted equation.";
+	    ErrorMessage = "Poorly formatted equation.";
 	  }
 
 	  ok = false;
+
+
 	  QString c2 = QString(equation[i + 1]);
 	  c2.toInt(&ok);
 
 	  if (!ok) { //If ok, simply let this proceed
 
-	    throw "Poorly formatted equation.";
+	    ErrorMessage = "Poorly formatted equation.";
 
 	  } else {
 
+	    PreviousValueIsNumeric = true; //Ensures no gap
 	    formattedEquation += c;
 	  }
 
 	} else {
 
+	  PreviousValueIsNumeric = false;
 	  if (c != " ") {
 
 	    formattedEquation += " " + c;
@@ -275,7 +277,7 @@ bool ShuntingYardAlgorithm::ValidateEquation(QString formattedEquation,
   foreach(QString Token, Tokens) {
 
     bool ok = false;
-    Token.toInt(&ok);
+    Token.toDouble(&ok);
 
     if(ok) { //Current value is numeric
 
