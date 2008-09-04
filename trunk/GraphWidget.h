@@ -55,6 +55,9 @@ class GraphWidget: public QGLWidget
    */  
   void SetDomainRange(int WindowWidth, int WindowHeight);
 
+ signals:
+  void gridMoved();
+
  protected:
 
   void mousePressEvent(QMouseEvent * event);

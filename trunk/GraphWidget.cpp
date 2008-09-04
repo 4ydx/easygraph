@@ -164,6 +164,8 @@ void GraphWidget::dropEvent(QDropEvent *event) {
   previousCenterOffset.Y = centerOffset.Y + previousCenterOffset.Y;
 
   centerOffset.X = centerOffset.Y = 0; 
+
+  emit gridMoved();
 }
 
 // ------------------ PRIVATE

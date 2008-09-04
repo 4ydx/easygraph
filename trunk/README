@@ -1,0 +1,9 @@
+Make sure to add QT += opengl to the pro file when compiling.
+
+TODO:
+
+1) Threading for the equation calculation so that no hiccup occurs when dragging
+
+2) 3D mode
+
+3) Ability to drag and rotate in 3D

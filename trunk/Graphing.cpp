@@ -30,6 +30,11 @@ void Graphing::initialize(QMainWindow &main) {
   QObject::connect(mainWindow.clearConstantsModelPushButton, SIGNAL(clicked()), this, SLOT(ClearConstantsModel()));
   QObject::connect(mainWindow.evaluatePushButton, SIGNAL(clicked()), this, SLOT(EvaluateEquation()));
 
+  QObject::connect(mainWindow.useRangeCheckBox, SIGNAL(clicked(bool)), mainWindow.lowerDoubleSpinBox, SLOT(setEnabled(bool)));
+  QObject::connect(mainWindow.useRangeCheckBox, SIGNAL(clicked(bool)), mainWindow.higherDoubleSpinBox, SLOT(setEnabled(bool)));
+
+  QObject::connect(mainWindow.graphWidget, SIGNAL(gridMoved()), this, SLOT(ReevaluateEquation()));
+
   main.show();
 }
 
@@ -45,13 +50,11 @@ void Graphing::EvaluateEquation() {
     p.VariableName = mainWindow.independentVariableLineEdit->text();
 
     mainWindow.equationLabel->setText("Equation: " + equation);
-    equation =  sya.GenerateReversePolishNotation(
-						  equation,
+    equation =  sya.GenerateReversePolishNotation(equation,
 						  p,
 						  model.getConstantValues());
 
     mainWindow.textBrowser->setText(" ==> " + equation + "\n");
-
 
     double low, high, step = 0.0;
 
@@ -59,15 +62,18 @@ void Graphing::EvaluateEquation() {
 
       low = mainWindow.lowerDoubleSpinBox->text().toDouble();
       high = mainWindow.higherDoubleSpinBox->text().toDouble();
-      step = (high - low) / 1000;
 
     } else {
 
-      low = mainWindow.graphWidget->GetDomainMinimum();
+      low = mainWindow.graphWidget->GetDomainMinimum(); 
       high = mainWindow.graphWidget->GetDomainMaximum();
 
-      step = (high - low) / 1000;
+      //Generate a tail on each end so that dragging still reveals a line
+      float width = high - low;
+      low = low < 0 ? low - width : - 1 * width;
+      high = high < 0 ? width : high + width;
     }
+    step = (high - low) / 1000;
 
     ReversePolishNotationCalculation rpn;
     graphPoints.clear();
@@ -89,17 +95,24 @@ void Graphing::EvaluateEquation() {
     mainWindow.graphWidget->drawGraph(graphPoints);
 
   } else {
-    QMessageBox::critical(
-			  0,
+
+    QMessageBox::critical(0,
 			  "Invalid Equation",
 			  ErrorMessage);
   }
 }
 
+void Graphing::ReevaluateEquation() {
+
+  EvaluateEquation();
+}
+
 void Graphing::AddConstantsModelPoint() {
-	model.insertRow(model.rowCount(QModelIndex()));
+  
+  model.insertRow(model.rowCount(QModelIndex()));
 }
 
 void Graphing::ClearConstantsModel() {
-	model.removeRows(0, model.rowCount(), QModelIndex());
+	
+  model.removeRows(0, model.rowCount(), QModelIndex());
 }
